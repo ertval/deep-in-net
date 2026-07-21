@@ -133,38 +133,50 @@ ftp 192.168.1.3
 
 ---
 
-## 🎯 Audit Questions & Reference Answers
+## 🎓 Comprehensive Beginner-Friendly Audit Guide
 
-Below is the definitive study guide for all questions asked during evaluation:
-
-### 1. Cabling & Networks
+### 1. Cabling & Networks (Exercise 1)
 - **What is an RJ-45 cable?**
-  *An 8-pin/8-contact (8P8C) modular connector used for Ethernet networking over twisted-pair cables.*
+  *An RJ-45 (Registered Jack 45) is an 8-position, 8-contact (8P8C) modular plug at the end of twisted-pair Ethernet cables (Cat5e/Cat6). Analogous to a 3-prong wall plug for electricity, it carries 8 individual electrical wires delivering network data pulses.*
 - **Straight-Through vs Crossover Cable?**
-  - **Straight-Through** (T568B to T568B): Connects different device tiers (PC to Switch, Switch to Router).
-  - **Crossover** (T568A to T568B): Connects identical device tiers directly (PC to PC, Switch to Switch).
+  - **Straight-Through** (T568B to T568B): Wired identically on both ends. Used to connect devices operating at **different OSI layers** (PC to Switch, Switch to Router), because switches automatically match transmit (TX) pins to receive (RX) pins.
+  - **Crossover** (T568A to T568B): Transmit pins (1 & 2) on end A connect to receive pins (3 & 6) on end B. Used to connect **identical device tiers directly** (PC to PC, Switch to Switch). Like a walkie-talkie, speaker must connect to microphone!
+- **How to Calculate Subnets Without Tools (Mental 4-Step Method)**:
+  1. *Find Block Size*: $256 - \text{last octet of netmask}$. For mask `/26` (`255.255.255.192`), Block Size $= 256 - 192 = 64$.
+  2. *List Subnet Ranges*: Count by $64$: `0..63`, `64..127`, `128..191`, `192..255`.
+  3. *Locate IP*: For `192.168.1.150`, it falls in block `128..191`.
+  4. *Identify Key IPs*:
+     - **Network ID**: `192.168.1.128` (Subnet identifier)
+     - **First Host**: `192.168.1.129`
+     - **Last Host**: `192.168.1.190`
+     - **Broadcast ID**: `192.168.1.191` (Sent to all hosts in subnet)
 
-### 2. Switching vs Hubs
-- **Switch**: Layer 2 Data Link device. Learns MAC addresses into a CAM table, providing dedicated bandwidth per port without collisions.
-- **Hub**: Layer 1 Physical device. Multi-port signal repeater; broadcasts all incoming traffic to all ports (half-duplex, single collision domain).
+### 2. Switching vs Hubs (Exercise 2)
+- **Hub (Layer 1 Physical)**: Acts like a megaphone in a classroom. When data enters one port, the hub broadcasts raw electrical signals out **all other ports**. Operates in **Half-Duplex** (one device talks at a time) with a **single shared collision domain**.
+- **Switch (Layer 2 Data Link)**: Acts like a private mailroom. Inspects incoming frame **MAC Addresses**, learns them into a **MAC Address Table (CAM Table)**, and forwards frames **only to the destination port**. Operates in **Full-Duplex** (simultaneous send/receive) with **isolated collision domains per port**.
 
-### 3. Protocols & OSI Layers
-| Protocol | Full Name | OSI Layer | Port(s) | Role |
-|---|---|---|---|---|
-| **DHCP** | Dynamic Host Configuration Protocol | Layer 7 (Application) | 67 / 68 (UDP) | Automatic IP allocation |
-| **DNS** | Domain Name System | Layer 7 (Application) | 53 (UDP/TCP) | Domain name to IP translation |
-| **HTTP** | Hypertext Transfer Protocol | Layer 7 (Application) | 80 (TCP) | Unencrypted web transfer |
-| **HTTPS**| HTTP Secure | Layer 7 (Application) | 443 (TCP) | TLS/SSL encrypted web transfer |
-| **FTP** | File Transfer Protocol | Layer 7 (Application) | 20 / 21 (TCP) | File upload / download |
-| **TCP** | Transmission Control Protocol | Layer 4 (Transport) | N/A | Connection-oriented, reliable |
-| **UDP** | User Datagram Protocol | Layer 4 (Transport) | N/A | Connectionless, low latency |
+### 3. Core Protocols & Services (Exercise 3)
+- **DHCP (UDP Ports 67/68)**: Automatically assigns IP addresses using the 4-step **DORA** process:
+  1. **Discover**: Client broadcasts looking for a server.
+  2. **Offer**: Server offers an IP (`192.168.1.100`).
+  3. **Request**: Client requests the offered IP.
+  4. **Acknowledge**: Server confirms assignment.
+- **DNS (Port 53)**: Acts as the Internet's phonebook. Translates human domain names (`deep-in-net.com`) into IP addresses (`192.168.1.99`).
+  - `A Record`: Domain $\rightarrow$ IPv4 address.
+  - `CNAME Record`: Domain alias $\rightarrow$ another domain name (`deep-in-net.com` $\rightarrow$ `deep-in-net.local`).
+- **HTTP vs HTTPS**:
+  - **HTTP (Port 80)**: Plaintext, unencrypted data transfer.
+  - **HTTPS (Port 443)**: Encrypted using SSL/TLS protocols for secure communication.
+- **FTP (Ports 20/21)**: Transfers files via control channel (Port 21) and data channel (Port 20). User `deepinnet` configured with `RWDNL` (Read, Write, Delete, Name/Rename, List) permissions.
+- **TCP vs UDP (Layer 4 Transport)**:
+  - **TCP**: Connection-oriented (3-way handshake SYN $\rightarrow$ SYN-ACK $\rightarrow$ ACK), reliable delivery, error checking, retransmissions.
+  - **UDP**: Connectionless, unreliable, low latency, no handshake. Used for streaming, VoIP, DNS, DHCP.
+- **Ports**: 16-bit identifiers (0–65535) directing incoming network traffic to specific software applications (like room/apartment numbers in a building address).
 
-### 4. Routing & Subnetting without Tools
-- **Subnetting Calculation Method**:
-  1. Identify netmask bits (e.g. `/26` = `255.255.255.192`).
-  2. Calculate Block Size: $256 - 192 = 64$.
-  3. Determine Subnets: `0..63`, `64..127`, `128..191`, `192..255`.
-  4. Network ID is the start of block; Broadcast ID is the last IP in block.
+### 4. Routing & Default Gateways (Exercises 4–8)
+- **Router (Layer 3 Network)**: Connects different subnets and routes data packets based on IP addresses and internal **Routing Tables**.
+- **Default Gateway**: The IP address of the local router interface that serves as the "exit door" for traffic destined for outside networks.
+- **Routing Table**: A database stored on a router listing destination networks, subnet masks, next-hop IP addresses, and exit interfaces (`ip route 192.168.20.0 255.255.255.0 10.0.0.2`).
 
 ---
 
