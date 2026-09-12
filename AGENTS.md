@@ -34,9 +34,11 @@ deep-in-net/
 ├── ex06.pkt      # Exercise 6: Multi-Router Static Routing Tables
 ├── ex07.pkt      # Exercise 7: Dual-Router Subnet Interconnection
 ├── ex08.pkt      # Exercise 8: 3-Subnet Full Mesh Static Routing Topology
-├── bonus.pkt     # Optional Bonus Topology
-├── README.md     # Public Documentation & Audit Reference
-├── AGENTS.md     # Agent Operational Guidelines (this document)
+├── bonus.pkt             # Optional Bonus Topology
+├── README.md             # Public Documentation & Audit Reference
+├── audit.md              # Official Evaluator Audit Checklist
+├── verify_topology.sh    # Automated Verification & Subnetting Validation Script
+├── AGENTS.md             # Agent Operational Guidelines (this document)
 └── docs/
     └── requirements/
         ├── readme.md  # Subject Specifications
@@ -65,11 +67,14 @@ deep-in-net/
 Agents should execute the following terminal checks to validate workspace integrity:
 
 ```bash
-# 1. Check root files exist
-ls -1 ex01.pkt ex02.pkt ex03.pkt ex04.pkt ex05.pkt ex06.pkt ex07.pkt ex08.pkt bonus.pkt README.md AGENTS.md
+# 1. Run automated test suite
+./verify_topology.sh
 
-# 2. Validate documentation file links and syntax
-test -f README.md && test -f AGENTS.md && test -f docs/requirements/readme.md && test -f docs/requirements/audit.md
+# 2. Check root files exist
+ls -1 ex01.pkt ex02.pkt ex03.pkt ex04.pkt ex05.pkt ex06.pkt ex07.pkt ex08.pkt bonus.pkt README.md audit.md verify_topology.sh AGENTS.md
+
+# 3. Validate documentation file links and syntax
+test -f README.md && test -f AGENTS.md && test -f audit.md && test -f docs/requirements/readme.md && test -f docs/requirements/audit.md
 ```
 
 ---
