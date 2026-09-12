@@ -503,6 +503,113 @@ else
 fi
 
 # ==============================================================================
+# TEST SUITE 7: Markdown Anchor Links & Table of Contents Validator
+# ==============================================================================
+log_header "TEST SUITE 7: Markdown Internal Anchors & TOC Integrity"
+
+python3 - << 'EOF'
+import sys
+import re
+
+with open('README.md', 'r') as f:
+    content = f.read()
+
+links = re.findall(r'\[([^\]]+)\]\((#[^)]+)\)', content)
+explicit_anchors = set(re.findall(r'<a\s+id="([^"]+)"', content))
+
+def gfm_anchor(text):
+    text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+    text = re.sub(r'[`*_~]', '', text)
+    text = text.strip().lower()
+    cleaned = [ch for ch in text if ch.isalnum() or ch.isspace() or ch == '-']
+    text = ''.join(cleaned)
+    text = re.sub(r'\s+', '-', text)
+    return text
+
+headers = re.findall(r'^(#+)\s+(.+)$', content, re.MULTILINE)
+header_anchors = {gfm_anchor(h) for level, h in headers}
+all_valid = explicit_anchors.union(header_anchors)
+
+broken = []
+for text, target in links:
+    anchor = target[1:]
+    if anchor not in all_valid:
+        broken.append((text, target))
+
+if broken:
+    print(f"  [\033[31m\033[1mFAIL\033[0m] Found {len(broken)} broken internal markdown links:")
+    for t, tgt in broken:
+        print(f"         Link '{t}' -> '{tgt}' does not resolve")
+    sys.exit(1)
+else:
+    print(f"  [\033[32m\033[1mPASS\033[0m] All {len(links)} internal markdown TOC links resolve cleanly")
+EOF
+
+if [ $? -eq 0 ]; then
+    test_pass "README.md internal links and Table of Contents 100% valid"
+else
+    test_fail "Broken internal markdown links detected in README.md"
+fi
+
+# ==============================================================================
+# TEST SUITE 8: Exercise Content Completeness (IOS, Diagrams, Mental Subnetting)
+# ==============================================================================
+log_header "TEST SUITE 8: Exercise Content Completeness (CLI, Diagrams, Subnetting)"
+
+python3 - << 'EOF'
+import sys
+
+with open('README.md', 'r') as f:
+    content = f.read()
+
+exercises = [
+    ("Exercise 1", "exercise-1"),
+    ("Exercise 2", "exercise-2"),
+    ("Exercise 3", "exercise-3"),
+    ("Exercise 4", "exercise-4"),
+    ("Exercise 5", "exercise-5"),
+    ("Exercise 6", "exercise-6"),
+    ("Exercise 7", "exercise-7"),
+    ("Exercise 8", "exercise-8"),
+    ("Bonus Exercise", "bonus-exercise"),
+]
+
+failed = False
+for name, anchor in exercises:
+    pos = content.find(f'id="{anchor}"')
+    if pos == -1:
+        print(f"  [\033[31m\033[1mFAIL\033[0m] {name} missing anchor tag '{anchor}'")
+        failed = True
+        continue
+
+    next_pos = len(content)
+    for _, other_anchor in exercises:
+        op = content.find(f'id="{other_anchor}"', pos + 20)
+        if op != -1 and op < next_pos:
+            next_pos = op
+    section_text = content[pos:next_pos]
+
+    has_diag = "mermaid" in section_text or "```\n" in section_text
+    has_ios = "```ios" in section_text
+    has_subnet = "subnet" in section_text.lower() and ("block size" in section_text.lower() or "calculation" in section_text.lower())
+
+    if not (has_diag and has_ios and has_subnet):
+        print(f"  [\033[31m\033[1mFAIL\033[0m] {name} incomplete: Diag={has_diag}, IOS={has_ios}, Subnet={has_subnet}")
+        failed = True
+    else:
+        print(f"  [\033[32m\033[1mPASS\033[0m] {name}: Diagram, Cisco IOS CLI & Mental Subnetting verified")
+
+if failed:
+    sys.exit(1)
+EOF
+
+if [ $? -eq 0 ]; then
+    test_pass "All 8 exercises plus bonus contain diagrams, Cisco IOS CLI, and subnetting calculations"
+else
+    test_fail "One or more exercises lack diagrams, Cisco IOS configurations, or subnetting math"
+fi
+
+# ==============================================================================
 # SUMMARY & EXIT STATUS
 # ==============================================================================
 log_header "VERIFICATION SUMMARY & AUDIT READINESS SCORECARD"
@@ -518,3 +625,4 @@ else
     echo -e "\n${CLR_BOLD}${CLR_RED}>>> [FAILURE] ${FAILED_TESTS} CHECKS FAILED. PLEASE REVIEW LOGS ABOVE. <<<${CLR_RESET}\n"
     exit 1
 fi
+

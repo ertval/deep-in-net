@@ -6,30 +6,36 @@
 ![Status](https://img.shields.io/badge/Audit-100%25%20Passing-brightgreen?style=for-the-badge)
 ![Automated Verification](https://img.shields.io/badge/Verification-Automated%20CI%2FCD%20Ready-blue?style=for-the-badge)
 
-Welcome to **deep-in-net**! 🚀 This repository contains complete solutions, topologies, Cisco IOS CLI configurations, step-by-step guides, subnetting calculations, and peer-audit cheat sheets for the **deep-in-net** networking module using **Cisco Packet Tracer**.
+Welcome to **deep-in-net**! 🚀 This repository contains complete solutions, topologies, Cisco IOS CLI configurations, step-by-step guides, mental subnetting calculations, and peer-audit cheat sheets for the **deep-in-net** networking module using **Cisco Packet Tracer**.
 
 ---
 
 ## 📑 Table of Contents
-1. [Repository Structure & Submission Deliverables](#-repository-structure--submission-deliverables)
-2. [Prerequisites & Installation](#-prerequisites--installation)
-3. [Tool-Free Subnetting Masterclass (Mental Math)](#-tool-free-subnetting-masterclass-mental-math)
-4. [Step-by-Step Exercise Guides & Topologies](#-step-by-step-exercise-guides--topologies)
-   - [Exercise 1: Crossover Cable Host-to-Host Links](#-exercise-1-crossover-cable-host-to-host-links)
-   - [Exercise 2: Switch vs Hub Collision Domain Topologies](#-exercise-2-switch-vs-hub-collision-domain-topologies)
-   - [Exercise 3: Core Network Services (DHCP, DNS, HTTPS, FTP)](#-exercise-3-core-network-services-dhcp-dns-https-ftp)
-   - [Exercise 4: Single Router & Default Gateway Topology](#-exercise-4-single-router--default-gateway-topology)
-   - [Exercise 5: Multi-Switch Subnet Routing](#-exercise-5-multi-switch-subnet-routing)
-   - [Exercise 6: Multi-Router Static Routing Tables](#-exercise-6-multi-router-static-routing-tables)
-   - [Exercise 7: Dual-Router Subnet Interconnection (Live Audit Task)](#-exercise-7-dual-router-subnet-interconnection-live-audit-task)
-   - [Exercise 8: 3-Subnet Full Mesh Static Routing Topology](#-exercise-8-3-subnet-full-mesh-static-routing-topology)
-   - [Bonus Exercise: Advanced VLAN Segmentation & Inter-VLAN Routing](#-bonus-exercise-advanced-vlan-segmentation--inter-vlan-routing)
-5. [Comprehensive Beginner-Friendly Audit Guide (Q&A)](#-comprehensive-beginner-friendly-audit-guide-qa)
-6. [Automated Verification Suite (`verify_topology.sh`)](#-automated-verification-suite-verify_topologysh)
-7. [License](#-license)
+1. [Repository Structure & Submission Deliverables](#repository-structure)
+2. [Prerequisites & Installation](#prerequisites)
+3. [Tool-Free Subnetting Masterclass (Mental Math)](#mental-subnetting)
+4. [Step-by-Step Exercise Guides & Topologies](#exercise-guides)
+   - [Exercise 1: Crossover Cable Host-to-Host Links](#exercise-1)
+   - [Exercise 2: Switch vs Hub Collision Domain Topologies](#exercise-2)
+   - [Exercise 3: Core Network Services (DHCP, DNS, HTTPS, FTP)](#exercise-3)
+   - [Exercise 4: Single Router & Default Gateway Topology](#exercise-4)
+   - [Exercise 5: Multi-Switch Subnet Routing](#exercise-5)
+   - [Exercise 6: Multi-Router Static Routing Tables](#exercise-6)
+   - [Exercise 7: Dual-Router Subnet Interconnection (Live Audit Task)](#exercise-7)
+   - [Exercise 8: 3-Subnet Full Mesh Static Routing Topology](#exercise-8)
+   - [Bonus Exercise: Advanced VLAN Segmentation & Inter-VLAN Routing](#bonus-exercise)
+5. [Comprehensive Beginner-Friendly Audit Guide (Q&A)](#audit-guide)
+   - [Section 1: Physical Layer & Cabling (Exercise 1)](#audit-section-1)
+   - [Section 2: Switches vs Hubs (Exercise 2)](#audit-section-2)
+   - [Section 3: Core Network Services (Exercise 3)](#audit-section-3)
+   - [Section 4: Routers & Routing (Exercises 4–8)](#audit-section-4)
+   - [Section 5: Live Recreation & Bonus Defense](#audit-section-5)
+6. [Automated Verification Suite (`verify_topology.sh`)](#verification-suite)
+7. [License](#license)
 
 ---
 
+<a id="repository-structure"></a>
 ## 📂 Repository Structure & Submission Deliverables
 
 Per official audit guidelines, all simulation `.pkt` files and documentation must be present directly in the repository root:
@@ -42,13 +48,15 @@ deep-in-net/
 ├── ex04.pkt              # Exercise 4: Single Router & Default Gateway Topology
 ├── ex05.pkt              # Exercise 5: Multi-Switch Subnet Routing
 ├── ex06.pkt              # Exercise 6: Multi-Router Static Routing Tables
-├── ex07.pkt              # Exercise 7: Dual-Router Subnet Interconnection
+├── ex07.pkt              # Exercise 7: Dual-Router Subnet Interconnection (Live Audit)
 ├── ex08.pkt              # Exercise 8: 3-Subnet Full Mesh Static Routing Topology
 ├── bonus.pkt             # Bonus: 802.1Q Inter-VLAN Routing / Router-on-a-Stick
 ├── README.md             # Detailed Documentation, Topologies, CLI commands, Audit Q&A
 ├── audit.md              # Official Evaluator Audit Checklist
 ├── verify_topology.sh    # Automated Verification & Subnetting Validation Script
+├── AGENTS.md             # Agent Guidelines & Repository Architecture
 └── docs/
+    ├── implementation_plan.md # Architectural Implementation Plan
     └── requirements/
         ├── readme.md     # Subject Specifications
         └── audit.md      # Evaluator Audit Rubric
@@ -56,9 +64,10 @@ deep-in-net/
 
 ---
 
+<a id="prerequisites"></a>
 ## 🛠️ Prerequisites & Installation
 
-To open and run the `.pkt` network topologies:
+To open, modify, and simulate the `.pkt` network topologies:
 
 1. **Download Cisco Packet Tracer**:
    - Get the official installer (v8.x recommended) from [Cisco Networking Academy (NetAcad)](https://www.netacad.com/).
@@ -75,10 +84,11 @@ To open and run the `.pkt` network topologies:
 
 ---
 
+<a id="mental-subnetting"></a>
 ## 🧮 Tool-Free Subnetting Masterclass (Mental Math)
 
 > [!IMPORTANT]
-> In the live audit, you are required to perform and explain subnetting calculations **without online tools or calculators**.
+> In the live peer audit, you are required to perform and explain subnetting calculations **without online tools or calculators**.
 
 ### The Anatomy of an IPv4 Address
 An IPv4 address consists of **32 binary bits** divided into **4 octets** (8 bits each) separated by periods (e.g., `192.168.1.150`).
@@ -90,17 +100,17 @@ An IPv4 address consists of **32 binary bits** divided into **4 octets** (8 bits
 1. **Find the Block Size (Magic Number)**:
    - Identify the interesting octet (the octet with a mask value other than `255` or `0`).
    - Subtract that value from `256`:
-     $$\text{Block Size} = 256 - \text{Netmask Octet}$$
+     $$	ext{Block Size} = 256 - 	ext{Netmask Octet}$$
 2. **List Subnet Increments**:
-   - Start from `0` and count up in steps of your block size until you exceed the target IP octet.
+   - Start from `0` and count up in steps of your block size until you determine the subnet boundary containing the target IP.
 3. **Identify Subnet Boundaries**:
    - **Network ID**: The start of the block containing the target IP.
    - **Next Network ID**: The start of the subsequent block.
-   - **Broadcast ID**: $\text{Next Network ID} - 1$.
+   - **Broadcast ID**: $	ext{Next Network ID} - 1$.
 4. **Calculate Usable Host Range & Capacity**:
-   - **First Usable Host**: $\text{Network ID} + 1$.
-   - **Last Usable Host**: $\text{Broadcast ID} - 1$.
-   - **Total Usable Hosts**: $2^h - 2$ (where $h = \text{number of host bits} = 32 - \text{CIDR prefix}$).
+   - **First Usable Host**: $	ext{Network ID} + 1$.
+   - **Last Usable Host**: $	ext{Broadcast ID} - 1$.
+   - **Total Usable Hosts**: $2^h - 2$ (where $h = 	ext{number of host bits} = 32 - 	ext{CIDR prefix}$).
 
 ### Subnet Reference Chart (/24 to /30)
 
@@ -116,14 +126,16 @@ An IPv4 address consists of **32 binary bits** divided into **4 octets** (8 bits
 
 ---
 
+<a id="exercise-guides"></a>
 ## 📚 Step-by-Step Exercise Guides & Topologies
 
 ---
 
+<a id="exercise-1"></a>
 ### 🔌 Exercise 1: Crossover Cable Host-to-Host Links
 
 #### Objective
-Connect 3 isolated pairs of PCs directly to each other without switches or hubs, configure static IP addresses, and confirm bidirectional communication.
+Connect 3 isolated pairs of PCs directly to each other without switches or hubs using **Copper Crossover** cables, configure static IP addresses across 3 distinct subnets, and confirm bidirectional communication.
 
 #### Topology Diagram
 ```
@@ -160,22 +172,51 @@ graph LR
 | **PC4** | FastEthernet0 | `192.168.3.10` | `255.255.255.0` | N/A | Copper Crossover |
 | **PC5** | FastEthernet0 | `192.168.3.11` | `255.255.255.0` | N/A | Copper Crossover |
 
-#### Subnetting Calculation
-- **Subnet 1**: `192.168.1.0/24` $\rightarrow$ Network: `192.168.1.0`, Usable: `192.168.1.1`–`192.168.1.254`, Broadcast: `192.168.1.255`.
-- **Subnet 2**: `192.168.2.0/24` $\rightarrow$ Network: `192.168.2.0`, Usable: `192.168.2.1`–`192.168.2.254`, Broadcast: `192.168.2.255`.
-- **Subnet 3**: `192.168.3.0/24` $\rightarrow$ Network: `192.168.3.0`, Usable: `192.168.3.1`–`192.168.3.254`, Broadcast: `192.168.3.255`.
+#### Mental Subnetting Calculations
+Applying the 4-step mental subnetting method across all three subnets:
+1. **Block Size**: The interesting octet is octet 4 with mask `0`. Block size is $256 - 0 = 256$.
+2. **Subnet Increments**: Multiples of 256 in the 4th octet ($0$ to $255$).
+3. **Subnet 1 (`192.168.1.0/24`)**:
+   - Network ID: `192.168.1.0`
+   - Broadcast ID: `192.168.1.255`
+   - Usable Host Range: `192.168.1.1` – `192.168.1.254` ($2^8 - 2 = 254$ usable hosts)
+   - Assigned: `PC0` (`192.168.1.10`), `PC1` (`192.168.1.11`)
+4. **Subnet 2 (`192.168.2.0/24`)**:
+   - Network ID: `192.168.2.0`
+   - Broadcast ID: `192.168.2.255`
+   - Usable Host Range: `192.168.2.1` – `192.168.2.254` ($254$ usable hosts)
+   - Assigned: `PC2` (`192.168.2.10`), `PC3` (`192.168.2.11`)
+5. **Subnet 3 (`192.168.3.0/24`)**:
+   - Network ID: `192.168.3.0`
+   - Broadcast ID: `192.168.3.255`
+   - Usable Host Range: `192.168.3.1` – `192.168.3.254` ($254$ usable hosts)
+   - Assigned: `PC4` (`192.168.3.10`), `PC5` (`192.168.3.11`)
+
+#### Cisco IOS & Endpoint Configuration
+*Note: In Exercise 1, connections are direct endpoint-to-endpoint links. On endpoints, IP configuration is performed in the IP Configuration panel. If terminating these links on a Cisco IOS device interface, the configuration is:*
+```ios
+! Conceptual Cisco IOS Interface Configuration for Direct Host Link
+enable
+configure terminal
+interface FastEthernet0/0
+ description Direct-Host-Point-to-Point
+ ip address 192.168.1.10 255.255.255.0
+ no shutdown
+exit
+```
 
 #### Step-by-Step Recreation in Packet Tracer
 1. Add 6 generic PCs (`PC0` to `PC5`).
 2. Select **Copper Crossover** cable (green dashed line with double arrows) from the connections toolbar.
 3. Connect `PC0` FastEthernet0 to `PC1` FastEthernet0.
 4. Repeat for `PC2` $\leftrightarrow$ `PC3` and `PC4` $\leftrightarrow$ `PC5`.
-5. Click each PC, open **Desktop** $\rightarrow$ **IP Configuration**, select **Static**, and input the IP and Netmask from the table.
+5. Click each PC, open **Desktop** $ightarrow$ **IP Configuration**, select **Static**, and input the IP and Netmask from the table.
 
 #### Verification Commands
 From `PC0` Command Prompt:
 ```cmd
 ping 192.168.1.11
+arp -a
 ```
 From `PC2` Command Prompt:
 ```cmd
@@ -189,6 +230,7 @@ ping 192.168.3.11
 
 ---
 
+<a id="exercise-2"></a>
 ### 🔀 Exercise 2: Switch vs Hub Collision Domain Topologies
 
 #### Objective
@@ -199,10 +241,8 @@ Build two parallel star topologies to contrast Layer 2 Switch frame switching (i
     Switch Subnet (192.168.1.0/24)               Hub Subnet (192.168.2.0/24)
 
           [ Cisco 2960 Switch ]                        [ Generic Hub ]
-             /       |       \                            /       |       \
-            /        |        \                          /        |        \
-         [PC0]     [PC1]     [PC2]                    [PC3]     [PC4]     [PC5]
-       .1.10      .1.11      .1.12                    .2.10     .2.11     .2.12
+             /       |       \                            /       |                   /        |        \                          /        |                 [PC0]     [PC1]     [PC2]                    [PC3]     [PC4]     [PC5]
+        .1.10      .1.11      .1.12                    .2.10     .2.11     .2.12
 ```
 
 ```mermaid
@@ -231,6 +271,37 @@ graph TD
 | **PC4** | Fa0 | `192.168.2.11` | `255.255.255.0` | Hub Port 1 | Copper Straight-Through |
 | **PC5** | Fa0 | `192.168.2.12` | `255.255.255.0` | Hub Port 2 | Copper Straight-Through |
 
+#### Mental Subnetting Calculations
+1. **Switch LAN (`192.168.1.0/24`)**:
+   - Mask: `255.255.255.0` $ightarrow$ Block Size: $256 - 0 = 256$.
+   - Network ID: `192.168.1.0` | Broadcast ID: `192.168.1.255`.
+   - Usable Range: `192.168.1.1` through `192.168.1.254` ($254$ hosts).
+2. **Hub LAN (`192.168.2.0/24`)**:
+   - Mask: `255.255.255.0` $ightarrow$ Block Size: $256 - 0 = 256$.
+   - Network ID: `192.168.2.0` | Broadcast ID: `192.168.2.255`.
+   - Usable Range: `192.168.2.1` through `192.168.2.254` ($254$ hosts).
+3. **Subnet Isolation Principle**: Devices in `192.168.1.0/24` cannot communicate with devices in `192.168.2.0/24` without an intermediate Layer 3 device (router), even if physically linked via the same switch.
+
+#### Cisco IOS CLI Switch Commands
+On the **Cisco 2960 Switch**, inspect the MAC address table (CAM table) and port states:
+```ios
+enable
+configure terminal
+hostname Switch1
+exit
+
+! Inspect MAC Address Table dynamically learned from PC traffic
+show mac address-table
+show mac address-table dynamic
+
+! Verify port speed, duplex mode (Full Duplex), and link status
+show interfaces status
+show interfaces FastEthernet 0/1
+
+! View MAC aging timer (default 300 seconds)
+show mac address-table aging-time
+```
+
 #### Step-by-Step Recreation in Packet Tracer
 1. Add one **Cisco 2960 Switch** and one **Generic Hub-PT**.
 2. Place 3 PCs (`PC0`, `PC1`, `PC2`) under the Switch.
@@ -246,6 +317,7 @@ graph TD
 
 ---
 
+<a id="exercise-3"></a>
 ### 🌐 Exercise 3: Core Network Services (DHCP, DNS, HTTPS, FTP)
 
 #### Objective
@@ -270,12 +342,52 @@ graph TD
 | **DHCP Server** | `192.168.1.2` | `255.255.255.0` | `192.168.1.1` | `192.168.1.4` | **DHCP** | HTTP, HTTPS, FTP, DNS | Pool: `serverPool`, Start: `192.168.1.100`, Max: 50 |
 | **HTTPS Server** | `192.168.1.99` | `255.255.255.0` | `192.168.1.1` | `192.168.1.4` | **HTTPS** | **HTTP (Off)**, DHCP, FTP, DNS | Port 443 ON, Port 80 OFF, `index.html` = `"hello"` |
 | **FTP Server** | `192.168.1.3` | `255.255.255.0` | `192.168.1.1` | `192.168.1.4` | **FTP** | HTTP, HTTPS, DHCP, DNS | User: `deepinnet`, Pass: `deepinnet`, Permissions: **RWDNL** |
-| **DNS Server** | `192.168.1.4` | `255.255.255.0` | `192.168.1.1` | `192.168.1.4` | **DNS** | HTTP, HTTPS, DHCP, FTP | A: `deep-in-net.local` $\rightarrow$ `192.168.1.99`<br/>CNAME: `deep-in-net.com` $\rightarrow$ `deep-in-net.local` |
+| **DNS Server** | `192.168.1.4` | `255.255.255.0` | `192.168.1.1` | `192.168.1.4` | **DNS** | HTTP, HTTPS, DHCP, FTP | A: `deep-in-net.local` $ightarrow$ `192.168.1.99`<br/>CNAME: `deep-in-net.com` $ightarrow$ `deep-in-net.local` |
+
+#### Mental Subnetting Calculations & IP Schema Plan
+- **Network ID**: `192.168.1.0/24` (Subnet Mask: `255.255.255.0`, Block Size: $256$).
+- **Capacity**: $2^8 - 2 = 254$ usable host IP addresses.
+- **Architectural Allocation**:
+  - `192.168.1.1`: Reserved Default Gateway.
+  - `192.168.1.2` - `192.168.1.99`: Static Infrastructure block (DHCP `.2`, FTP `.3`, DNS `.4`, HTTPS `.99`).
+  - `192.168.1.100` - `192.168.1.149`: Dynamic DHCP Lease Pool (50 addresses).
+  - `192.168.1.150` - `192.168.1.254`: Future static/expansion block.
+  - `192.168.1.255`: Directed Subnet Broadcast.
+
+#### Cisco IOS CLI Switch Commands
+```ios
+enable
+configure terminal
+hostname Core-Switch
+
+! Label Switch Ports for Clarity
+interface FastEthernet0/1
+ description Uplink-Gateway-Fa0-1
+exit
+interface FastEthernet0/2
+ description Server-DHCP-192.168.1.2
+exit
+interface FastEthernet0/3
+ description Server-FTP-192.168.1.3
+exit
+interface FastEthernet0/4
+ description Server-DNS-192.168.1.4
+exit
+interface FastEthernet0/5
+ description Server-HTTPS-192.168.1.99
+exit
+
+end
+write memory
+
+! Verify MAC Addresses for all connected servers and clients
+show mac address-table dynamic
+```
 
 #### Step-by-Step Server Setup in Packet Tracer
 1. **DHCP Server Configuration**:
    - Static IP: `192.168.1.2`, Subnet Mask: `255.255.255.0`.
-   - Go to **Services** $\rightarrow$ **DHCP**:
+   - Go to **Services** $ightarrow$ **DHCP**:
      - Service: **ON**
      - Pool Name: `serverPool`
      - Default Gateway: `192.168.1.1`
@@ -287,7 +399,7 @@ graph TD
    - Disable HTTP, HTTPS, FTP, DNS on this server.
 2. **HTTPS Server Configuration**:
    - Static IP: `192.168.1.99`, Subnet Mask: `255.255.255.0`.
-   - Go to **Services** $\rightarrow$ **HTTP**:
+   - Go to **Services** $ightarrow$ **HTTP**:
      - HTTP: **OFF**
      - HTTPS: **ON**
      - Edit `index.html`:
@@ -298,7 +410,7 @@ graph TD
    - Disable DHCP, FTP, DNS.
 3. **FTP Server Configuration**:
    - Static IP: `192.168.1.3`, Subnet Mask: `255.255.255.0`.
-   - Go to **Services** $\rightarrow$ **FTP**:
+   - Go to **Services** $ightarrow$ **FTP**:
      - Service: **ON**
      - Username: `deepinnet`
      - Password: `deepinnet`
@@ -307,7 +419,7 @@ graph TD
    - Disable HTTP, HTTPS, DHCP, DNS.
 4. **DNS Server Configuration**:
    - Static IP: `192.168.1.4`, Subnet Mask: `255.255.255.0`.
-   - Go to **Services** $\rightarrow$ **DNS**:
+   - Go to **Services** $ightarrow$ **DNS**:
      - Service: **ON**
      - Resource Record 1:
        - Name: `deep-in-net.local`
@@ -321,31 +433,22 @@ graph TD
        - Click **Add**.
    - Disable HTTP, HTTPS, DHCP, FTP.
 5. **Client PC Setup**:
-   - On `PC0`, `PC1`, `PC2`: Open **Desktop** $\rightarrow$ **IP Configuration**, select **DHCP**. Verify that the PC automatically receives an IP in the `192.168.1.100+` range, subnet mask `255.255.255.0`, Gateway `192.168.1.1`, and DNS `192.168.1.4`.
+   - On `PC0`, `PC1`, `PC2`: Open **Desktop** $ightarrow$ **IP Configuration**, select **DHCP**. Verify that the PC automatically receives an IP in the `192.168.1.100+` range, subnet mask `255.255.255.0`, Gateway `192.168.1.1`, and DNS `192.168.1.4`.
 
 #### Verification Commands (From Any PC Command Prompt)
 ```cmd
-# 1. Verify DHCP Lease
 ipconfig /renew
 ipconfig /all
-
-# 2. Test DNS Resolution (A and CNAME)
 nslookup deep-in-net.com
-
-# 3. Test HTTPS Web Service
-# Open Desktop -> Web Browser -> Enter URL: https://deep-in-net.com
-# Displays: "hello"
-
-# 4. Test FTP Authentication & Operations
 ftp 192.168.1.3
-Username: deepinnet
-Password: deepinnet
-ftp> dir
-ftp> quit
 ```
+*Web Browser Verification*:
+- Open **Desktop** $ightarrow$ **Web Browser**.
+- URL: `https://deep-in-net.com` $ightarrow$ Displays: `hello`.
 
 ---
 
+<a id="exercise-4"></a>
 ### 🛣️ Exercise 4: Single Router & Default Gateway Topology
 
 #### Objective
@@ -366,6 +469,16 @@ graph LR
 | **Router1** | Fa0/1 | `192.168.2.1` | `255.255.255.0` | N/A | Subnet 2 Gateway |
 | **PC1** | Fa0 | `192.168.2.10` | `255.255.255.0` | `192.168.2.1` | Subnet 2 Host |
 
+#### Mental Subnetting Calculations
+1. **Subnet 1 (`192.168.1.0/24`)**:
+   - Mask `255.255.255.0` $ightarrow$ Block Size: $256$.
+   - Network ID: `192.168.1.0`, Usable Range: `192.168.1.1` - `192.168.1.254`, Broadcast: `192.168.1.255`.
+2. **Subnet 2 (`192.168.2.0/24`)**:
+   - Mask `255.255.255.0` $ightarrow$ Block Size: $256$.
+   - Network ID: `192.168.2.0`, Usable Range: `192.168.2.1` - `192.168.2.254`, Broadcast: `192.168.2.255`.
+3. **Routing Mechanism**:
+   - `PC0` (`192.168.1.10`) compares its netmask `255.255.255.0` with destination `192.168.2.10`. Because the network prefix `192.168.1` does not match `192.168.2`, `PC0` transmits the packet to its configured Default Gateway `192.168.1.1`. The router intercepts the frame, consults its internal routing table, and forwards the packet out interface `Fa0/1` to `PC1`.
+
 #### Cisco IOS CLI Configuration
 ```ios
 enable
@@ -374,12 +487,14 @@ hostname Router1
 
 ! Configure Subnet 1 Gateway Interface
 interface FastEthernet0/0
+ description Subnet-1-Gateway
  ip address 192.168.1.1 255.255.255.0
  no shutdown
 exit
 
 ! Configure Subnet 2 Gateway Interface
 interface FastEthernet0/1
+ description Subnet-2-Gateway
  ip address 192.168.2.1 255.255.255.0
  no shutdown
 exit
@@ -389,15 +504,21 @@ write memory
 ```
 
 #### Verification Commands
+```ios
+! Router CLI Verification
+show ip interface brief
+show ip route
+```
 From `PC0`:
 ```cmd
 ping 192.168.2.10
 traceroute 192.168.2.10
 ```
-*Note*: The first ping packet may timeout due to ARP resolution; subsequent packets return `Reply from 192.168.2.10: bytes=32 time<1ms TTL=127`.
+*Note*: The first ping packet may timeout due to initial ARP discovery; subsequent packets return `Reply from 192.168.2.10: bytes=32 time<1ms TTL=127`.
 
 ---
 
+<a id="exercise-5"></a>
 ### 🔀 Exercise 5: Multi-Switch Subnet Routing
 
 #### Objective
@@ -430,18 +551,74 @@ graph TD
 | **PC2** | Fa0 | `192.168.2.10` | `255.255.255.0` | `192.168.2.1` | Switch 2 Fa0/2 |
 | **PC3** | Fa0 | `192.168.2.11` | `255.255.255.0` | `192.168.2.1` | Switch 2 Fa0/3 |
 
-#### Cisco IOS CLI Configuration
+#### Mental Subnetting Calculations
+- **Subnet 1 (`192.168.1.0/24`)**:
+  - Block Size: $256$, Usable Range: `192.168.1.1` - `192.168.1.254`, Broadcast: `192.168.1.255`.
+  - Intra-subnet communication between `PC0` and `PC1` is switched locally at Layer 2 (MAC addressing) without reaching the router CPU.
+- **Subnet 2 (`192.168.2.0/24`)**:
+  - Block Size: $256$, Usable Range: `192.168.2.1` - `192.168.2.254`, Broadcast: `192.168.2.255`.
+  - Inter-subnet traffic (e.g., `PC0` to `PC2`) travels up to the router interface `Fa0/0`, is routed across subnets, and egresses out `Fa0/1`.
+
+#### Cisco IOS CLI Configurations
+
+##### Router Configuration
 ```ios
 enable
 configure terminal
+hostname Router1
+
 interface FastEthernet0/0
+ description Subnet-1-Gateway
  ip address 192.168.1.1 255.255.255.0
  no shutdown
 exit
+
 interface FastEthernet0/1
+ description Subnet-2-Gateway
  ip address 192.168.2.1 255.255.255.0
  no shutdown
 exit
+
+end
+write memory
+```
+
+##### Switch 1 Configuration
+```ios
+enable
+configure terminal
+hostname Switch1
+
+interface FastEthernet0/1
+ description Uplink-to-Router-Fa0/0
+exit
+interface FastEthernet0/2
+ description PC0-Host
+exit
+interface FastEthernet0/3
+ description PC1-Host
+exit
+
+end
+write memory
+```
+
+##### Switch 2 Configuration
+```ios
+enable
+configure terminal
+hostname Switch2
+
+interface FastEthernet0/1
+ description Uplink-to-Router-Fa0/1
+exit
+interface FastEthernet0/2
+ description PC2-Host
+exit
+interface FastEthernet0/3
+ description PC3-Host
+exit
+
 end
 write memory
 ```
@@ -452,6 +629,7 @@ write memory
 
 ---
 
+<a id="exercise-6"></a>
 ### 🔀 Exercise 6: Multi-Router Static Routing Tables
 
 #### Objective
@@ -465,15 +643,19 @@ graph LR
     R2 --- PC2["PC2<br/>192.168.20.10/24"]
 ```
 
-#### Addressing Schema & Subnetting
-- **Subnet 1 (LAN R1)**: `192.168.10.0/24` (Gateway: `192.168.10.1`)
-- **WAN Serial Link**: `10.0.0.0/30`
-  - Subnet Mask: `255.255.255.252` (Block Size $= 256 - 252 = 4$)
-  - Network ID: `10.0.0.0`
-  - R1 Serial Interface: `10.0.0.1`
-  - R2 Serial Interface: `10.0.0.2`
-  - Broadcast ID: `10.0.0.3`
-- **Subnet 2 (LAN R2)**: `192.168.20.0/24` (Gateway: `192.168.20.1`)
+#### Addressing Schema & Mental Subnetting
+1. **Subnet 1 (LAN R1)**: `192.168.10.0/24`
+   - Mask: `255.255.255.0` $ightarrow$ Block Size: $256$.
+   - Network ID: `192.168.10.0` | Gateway: `192.168.10.1` | Broadcast: `192.168.10.255`.
+2. **WAN Serial Link**: `10.0.0.0/30`
+   - Mask: `255.255.255.252`. Interesting octet: 4th octet (`252`).
+   - Step 1: Magic Number / Block Size $= 256 - 252 = 4$.
+   - Step 2: Increments: $0, 4, 8 \dots$ Network ID $= 10.0.0.0$.
+   - Step 3: Broadcast ID $= 0 + 4 - 1 = 3 ightarrow 10.0.0.3$.
+   - Step 4: Usable Host Range: $2^{32-30} - 2 = 2$ hosts $ightarrow$ `10.0.0.1` (R1) and `10.0.0.2` (R2).
+3. **Subnet 2 (LAN R2)**: `192.168.20.0/24`
+   - Mask: `255.255.255.0` $ightarrow$ Block Size: $256$.
+   - Network ID: `192.168.20.0` | Gateway: `192.168.20.1` | Broadcast: `192.168.20.255`.
 
 #### Cisco IOS CLI Configuration
 
@@ -485,18 +667,20 @@ hostname R1
 
 ! LAN Interface
 interface FastEthernet0/0
+ description LAN-Subnet-1
  ip address 192.168.10.1 255.255.255.0
  no shutdown
 exit
 
 ! WAN Serial Interface (DCE side provides clock)
 interface Serial0/0/0
+ description WAN-Link-to-R2
  ip address 10.0.0.1 255.255.255.252
  clock rate 64000
  no shutdown
 exit
 
-! Static Route to Remote LAN Subnet 2 via R2
+! Static Route to Remote LAN Subnet 2 via R2 Serial Interface
 ip route 192.168.20.0 255.255.255.0 10.0.0.2
 
 end
@@ -511,17 +695,19 @@ hostname R2
 
 ! LAN Interface
 interface FastEthernet0/0
+ description LAN-Subnet-2
  ip address 192.168.20.1 255.255.255.0
  no shutdown
 exit
 
 ! WAN Serial Interface (DTE side)
 interface Serial0/0/0
+ description WAN-Link-to-R1
  ip address 10.0.0.2 255.255.255.252
  no shutdown
 exit
 
-! Static Route to Remote LAN Subnet 1 via R1
+! Static Route to Remote LAN Subnet 1 via R1 Serial Interface
 ip route 192.168.10.0 255.255.255.0 10.0.0.1
 
 end
@@ -548,94 +734,215 @@ traceroute 192.168.20.10
 
 ---
 
+<a id="exercise-7"></a>
 ### 🔁 Exercise 7: Dual-Router Subnet Interconnection (Live Audit Task)
 
 #### Objective
 Recreate from scratch during the live peer audit a dual-router, dual-subnet architecture connecting `172.16.1.0/24` and `172.16.2.0/24` across WAN link `10.1.1.0/30` without using external notes or calculators.
 
 #### Topology Diagram
+```
+    [PC0] .1.10
+                 [Switch 1] --- Fa0/0 [Router 1]
+        /                        | Se0/0/0 (DCE: clock 64000)
+    [PC1] .1.11                  |
+                                 | 10.1.1.0/30 Serial Link
+                                 |
+    [PC2] .2.10                  | Se0/0/0 (DTE)
+        \                        |
+         [Switch 2] --- Fa0/0 [Router 2]
+        /
+    [PC3] .2.11
+```
+
 ```mermaid
 graph LR
     subgraph Subnet 1 [172.16.1.0/24]
-        PC0[PC0: 172.16.1.10] --- SW1[Switch 1]
-        PC1[PC1: 172.16.1.11] --- SW1
+        PC0[PC0: 172.16.1.10] ---|Fa0/2| SW1[Switch 1]
+        PC1[PC1: 172.16.1.11] ---|Fa0/3| SW1
     end
     subgraph Subnet 2 [172.16.2.0/24]
-        PC2[PC2: 172.16.2.10] --- SW2[Switch 2]
-        PC3[PC3: 172.16.2.11] --- SW2
+        PC2[PC2: 172.16.2.10] ---|Fa0/2| SW2[Switch 2]
+        PC3[PC3: 172.16.2.11] ---|Fa0/3| SW2
     end
-    SW1 --- R1[Router 1<br/>Fa0/0: 172.16.1.1<br/>Se0/0/0: 10.1.1.1/30]
-    R1 ===|10.1.1.0/30| R2[Router 2<br/>Se0/0/0: 10.1.1.2/30<br/>Fa0/0: 172.16.2.1]
-    R2 --- SW2
+    SW1 ---|Fa0/1 to Fa0/0| R1[Router 1<br/>Fa0/0: 172.16.1.1<br/>Se0/0/0: 10.1.1.1/30]
+    R1 ===|Serial DCE: 10.1.1.0/30| R2[Router 2<br/>Se0/0/0: 10.1.1.2/30<br/>Fa0/0: 172.16.2.1]
+    R2 ---|Fa0/0 to Fa0/1| SW2
 ```
 
 #### Addressing Schema
-| Device | Interface | IP Address | Subnet Mask | Default Gateway |
-|:---|:---|:---|:---|:---|
-| **PC0** | Fa0 | `172.16.1.10` | `255.255.255.0` | `172.16.1.1` |
-| **PC1** | Fa0 | `172.16.1.11` | `255.255.255.0` | `172.16.1.1` |
-| **R1** | Fa0/0 | `172.16.1.1` | `255.255.255.0` | N/A |
-| **R1** | Se0/0/0 | `10.1.1.1` | `255.255.255.252` | N/A |
-| **R2** | Se0/0/0 | `10.1.1.2` | `255.255.255.252` | N/A |
-| **R2** | Fa0/0 | `172.16.2.1` | `255.255.255.0` | N/A |
-| **PC2** | Fa0 | `172.16.2.10` | `255.255.255.0` | `172.16.2.1` |
-| **PC3** | Fa0 | `172.16.2.11` | `255.255.255.0` | `172.16.2.1` |
+| Device | Interface | IP Address | Subnet Mask | Default Gateway | Switch / Cable Connection |
+|:---|:---|:---|:---|:---|:---|
+| **PC0** | Fa0 | `172.16.1.10` | `255.255.255.0` | `172.16.1.1` | Switch 1 `Fa0/2` (Straight-Through) |
+| **PC1** | Fa0 | `172.16.1.11` | `255.255.255.0` | `172.16.1.1` | Switch 1 `Fa0/3` (Straight-Through) |
+| **Switch 1** | Fa0/1 | N/A (Layer 2) | N/A | N/A | Router 1 `Fa0/0` (Straight-Through) |
+| **R1** | Fa0/0 | `172.16.1.1` | `255.255.255.0` | N/A | Switch 1 `Fa0/1` (Straight-Through) |
+| **R1** | Se0/0/0 | `10.1.1.1` | `255.255.255.252` | N/A | R2 `Se0/0/0` (Serial DCE - Clock Rate) |
+| **R2** | Se0/0/0 | `10.1.1.2` | `255.255.255.252` | N/A | R1 `Se0/0/0` (Serial DTE) |
+| **R2** | Fa0/0 | `172.16.2.1` | `255.255.255.0` | N/A | Switch 2 `Fa0/1` (Straight-Through) |
+| **Switch 2** | Fa0/1 | N/A (Layer 2) | N/A | N/A | Router 2 `Fa0/0` (Straight-Through) |
+| **PC2** | Fa0 | `172.16.2.10` | `255.255.255.0` | `172.16.2.1` | Switch 2 `Fa0/2` (Straight-Through) |
+| **PC3** | Fa0 | `172.16.2.11` | `255.255.255.0` | `172.16.2.1` | Switch 2 `Fa0/3` (Straight-Through) |
 
-#### Live Audit Recreation Checklist (5-Minute Speed-Run)
-1. **Drop Devices**: 2 Routers (2811), 2 Switches (2960), 4 PCs.
-2. **Add Serial WIC Modules**: Power off both routers $\rightarrow$ drag `WIC-2T` into slot 0 $\rightarrow$ power on.
-3. **Cabling**:
-   - Copper Straight-Through from PCs to Switches, and Switches to Router `Fa0/0`.
-   - Serial DCE cable from R1 `Se0/0/0` to R2 `Se0/0/0`.
-4. **Paste R1 CLI**:
-   ```ios
-   enable
-   configure terminal
-   interface Fa0/0
-    ip address 172.16.1.1 255.255.255.0
-    no shutdown
-   interface Se0/0/0
-    ip address 10.1.1.1 255.255.255.252
-    clock rate 64000
-    no shutdown
-   exit
-   ip route 172.16.2.0 255.255.255.0 10.1.1.2
-   end
+#### Mental Subnetting Calculations
+1. **Subnet 1 (`172.16.1.0/24`)**:
+   - Class B Private Range (`172.16.0.0` - `172.31.255.255`) subnetted to `/24`.
+   - Netmask: `255.255.255.0` $ightarrow$ Block Size: $256 - 0 = 256$.
+   - Network ID: `172.16.1.0`, Usable: `172.16.1.1` to `172.16.1.254`, Broadcast: `172.16.1.255`.
+2. **Subnet 2 (`172.16.2.0/24`)**:
+   - Netmask: `255.255.255.0` $ightarrow$ Block Size: $256 - 0 = 256$.
+   - Network ID: `172.16.2.0`, Usable: `172.16.2.1` to `172.16.2.254`, Broadcast: `172.16.2.255`.
+3. **WAN Point-to-Point Link (`10.1.1.0/30`)**:
+   - Class A Private Range subnetted to `/30`.
+   - Netmask: `255.255.255.252` $ightarrow$ Block Size: $256 - 252 = 4$.
+   - Network ID: `10.1.1.0`, Usable: `10.1.1.1` and `10.1.1.2`, Broadcast: `10.1.1.3`.
+   - Total Usable Hosts: $2^{32-30} - 2 = 2^2 - 2 = 2$ addresses.
+
+#### Zero-Ambiguity Live Audit Recreation Walkthrough (5-Minute Speed-Run)
+
+##### Step 0: Handle System Configuration Dialog Prompt
+When dragging a new Cisco 2811 router onto the canvas and opening its CLI tab, Packet Tracer displays:
+```
+Continue with configuration dialog? [yes/no]: no
+Press RETURN to get started!
+```
+> Always type **`no`** and press **Enter** twice. Never enter the auto-config dialog.
+
+##### Step 1: Install Serial WIC-2T Interface Card
+1. Click **Router 1** $ightarrow$ **Physical** tab.
+2. Toggle the round power switch **OFF** (the green LED turns off).
+3. In the left-hand Modules pane, select **`WIC-2T`**.
+4. Drag the `WIC-2T` module card into slot **`WIC 0`** (bottom right bay).
+5. Toggle the power switch back **ON** (green LED illuminates).
+6. Repeat steps 1–5 on **Router 2**.
+
+##### Step 2: Cabling the Devices (Critical Port & DCE Selection)
+1. **Endpoint to Switch Cabling** (Copper Straight-Through):
+   - `PC0` $ightarrow$ Switch 1 `Fa0/2`
+   - `PC1` $ightarrow$ Switch 1 `Fa0/3`
+   - `PC2` $ightarrow$ Switch 2 `Fa0/2`
+   - `PC3` $ightarrow$ Switch 2 `Fa0/3`
+2. **Switch to Router Cabling** (Copper Straight-Through):
+   - Switch 1 `Fa0/1` $ightarrow$ Router 1 `Fa0/0`
+   - Switch 2 `Fa0/1` $ightarrow$ Router 2 `Fa0/0`
+3. **Serial Inter-Router Cabling (DCE vs DTE)**:
+   - Select the **Serial DCE** cable (red jagged lightning cable with clock icon).
+   - **Click Router 1 FIRST** and select interface **`Serial0/0/0`**. *(Clicking R1 first designates R1 as the DCE clock provider).*
+   - **Click Router 2 SECOND** and select interface **`Serial0/0/0`**. *(R2 is designated as DTE).*
+
+##### Step 3: Pasteable Cisco IOS CLI Configurations
+
+###### Router 1 (R1) - Fast Copy-Paste Block
+```ios
+enable
+configure terminal
+hostname R1
+
+interface FastEthernet0/0
+ description LAN-Subnet-1-Gateway
+ ip address 172.16.1.1 255.255.255.0
+ no shutdown
+exit
+
+interface Serial0/0/0
+ description WAN-Link-to-R2
+ ip address 10.1.1.1 255.255.255.252
+ clock rate 64000
+ no shutdown
+exit
+
+ip route 172.16.2.0 255.255.255.0 10.1.1.2
+
+end
+write memory
+```
+
+###### Router 2 (R2) - Fast Copy-Paste Block
+```ios
+enable
+configure terminal
+hostname R2
+
+interface FastEthernet0/0
+ description LAN-Subnet-2-Gateway
+ ip address 172.16.2.1 255.255.255.0
+ no shutdown
+exit
+
+interface Serial0/0/0
+ description WAN-Link-to-R1
+ ip address 10.1.1.2 255.255.255.252
+ no shutdown
+exit
+
+ip route 172.16.1.0 255.255.255.0 10.1.1.1
+
+end
+write memory
+```
+
+##### Step 4: Configure PC IP Addresses
+- Open **Desktop** $ightarrow$ **IP Configuration** on each PC:
+  - `PC0`: IP `172.16.1.10`, Mask `255.255.255.0`, Gateway `172.16.1.1`
+  - `PC1`: IP `172.16.1.11`, Mask `255.255.255.0`, Gateway `172.16.1.1`
+  - `PC2`: IP `172.16.2.10`, Mask `255.255.255.0`, Gateway `172.16.2.1`
+  - `PC3`: IP `172.16.2.11`, Mask `255.255.255.0`, Gateway `172.16.2.1`
+
+##### Step 5: Rapid Verification & Troubleshooting
+1. From `PC0` Command Prompt:
+   ```cmd
+   ping 172.16.1.11
+   ping 172.16.2.10
+   traceroute 172.16.2.10
    ```
-5. **Paste R2 CLI**:
+2. On `R1` CLI:
    ```ios
-   enable
-   configure terminal
-   interface Fa0/0
-    ip address 172.16.2.1 255.255.255.0
-    no shutdown
-   interface Se0/0/0
-    ip address 10.1.1.2 255.255.255.252
-    no shutdown
-   exit
-   ip route 172.16.1.0 255.255.255.0 10.1.1.1
-   end
+   show ip interface brief
+   show ip route
+   show controllers serial0/0/0
    ```
-6. **Configure PC IPs** and test `ping 172.16.2.10` from `PC0`.
+   > `show controllers serial0/0/0` confirms that `DCE V.35, clock rate 64000` is active on R1.
 
 ---
 
+<a id="exercise-8"></a>
 ### 🕸️ Exercise 8: 3-Subnet Full Mesh Static Routing Topology
 
 #### Objective
-Design and implement a redundant 3-router, 3-subnet architecture where all three subnets (`192.168.1.0/24`, `192.168.2.0/24`, `192.168.3.0/24`) are fully interconnected via point-to-point WAN links. Configure static routes on every router for all remote LANs and transit links.
+Design and implement a redundant 3-router, 3-subnet architecture where all three subnets (`192.168.1.0/24`, `192.168.2.0/24`, `192.168.3.0/24`) are fully interconnected via point-to-point WAN links. Configure static routes on every router for all remote LANs and transit links to establish full reachability with 2 PCs per switch.
 
 #### Topology Diagram
+```
+        [PC0] .1.10   [PC1] .1.11
+             \         /
+             [ Switch 1 ]
+                  |
+             [ Router 1 ] (192.168.1.1)
+             /            (10.0.12.0/30)      (10.0.13.0/30)
+          /                   [ Router 2 ] ======= [ Router 3 ]
+  (192.168.2.1) (10.0.23.0/30) (192.168.3.1)
+        |                       |
+   [ Switch 2 ]            [ Switch 3 ]
+     /      \                /        [PC2]    [PC3]          [PC4]    [PC5]
+  .2.10    .2.11          .3.10    .3.11
+```
+
 ```mermaid
 graph TD
     subgraph LAN 1 [192.168.1.0/24]
-        PC1[PC1: 192.168.1.10] --- SW1[Switch 1] --- R1[Router 1]
+        PC0[PC0: 192.168.1.10] --- SW1[Switch 1]
+        PC1[PC1: 192.168.1.11] --- SW1
+        SW1 --- R1[Router 1<br/>Fa0/0: 192.168.1.1]
     end
     subgraph LAN 2 [192.168.2.0/24]
-        PC2[PC2: 192.168.2.10] --- SW2[Switch 2] --- R2[Router 2]
+        PC2[PC2: 192.168.2.10] --- SW2[Switch 2]
+        PC3[PC3: 192.168.2.11] --- SW2
+        SW2 --- R2[Router 2<br/>Fa0/0: 192.168.2.1]
     end
     subgraph LAN 3 [192.168.3.0/24]
-        PC3[PC3: 192.168.3.10] --- SW3[Switch 3] --- R3[Router 3]
+        PC4[PC4: 192.168.3.10] --- SW3[Switch 3]
+        PC5[PC5: 192.168.3.11] --- SW3
+        SW3 --- R3[Router 3<br/>Fa0/0: 192.168.3.1]
     end
 
     R1 ===|WAN 12: 10.0.12.0/30| R2
@@ -644,14 +951,26 @@ graph TD
 ```
 
 #### Addressing Schema
-| Subnet / Link | Network CIDR | Router A Interface & IP | Router B Interface & IP | Subnet Mask | Usable Range |
+| Subnet / Link | Network CIDR | Router A Interface & IP | Router B Interface & IP | Subnet Mask | Usable Range / Hosts |
 |:---|:---|:---|:---|:---|:---|
-| **LAN 1** | `192.168.1.0/24` | R1 Fa0/0 (`192.168.1.1`) | Hosts: `192.168.1.10+` | `255.255.255.0` | `.1` to `.254` |
-| **LAN 2** | `192.168.2.0/24` | R2 Fa0/0 (`192.168.2.1`) | Hosts: `192.168.2.10+` | `255.255.255.0` | `.1` to `.254` |
-| **LAN 3** | `192.168.3.0/24` | R3 Fa0/0 (`192.168.3.1`) | Hosts: `192.168.3.10+` | `255.255.255.0` | `.1` to `.254` |
-| **WAN R1-R2** | `10.0.12.0/30` | R1 Se0/0/0 (`10.0.12.1`) | R2 Se0/0/0 (`10.0.12.2`) | `255.255.255.252` | `.1` to `.2` |
-| **WAN R2-R3** | `10.0.23.0/30` | R2 Se0/0/1 (`10.0.23.1`) | R3 Se0/0/0 (`10.0.23.2`) | `255.255.255.252` | `.1` to `.2` |
-| **WAN R1-R3** | `10.0.13.0/30` | R1 Se0/0/1 (`10.0.13.1`) | R3 Se0/0/1 (`10.0.13.2`) | `255.255.255.252` | `.1` to `.2` |
+| **LAN 1** | `192.168.1.0/24` | R1 Fa0/0 (`192.168.1.1`) | Hosts: `PC0` (.10), `PC1` (.11) | `255.255.255.0` | `.1` to `.254` |
+| **LAN 2** | `192.168.2.0/24` | R2 Fa0/0 (`192.168.2.1`) | Hosts: `PC2` (.10), `PC3` (.11) | `255.255.255.0` | `.1` to `.254` |
+| **LAN 3** | `192.168.3.0/24` | R3 Fa0/0 (`192.168.3.1`) | Hosts: `PC4` (.10), `PC5` (.11) | `255.255.255.0` | `.1` to `.254` |
+| **WAN R1-R2** | `10.0.12.0/30` | R1 Se0/0/0 (`10.0.12.1`) [DCE] | R2 Se0/0/0 (`10.0.12.2`) [DTE] | `255.255.255.252` | `10.0.12.1` – `10.0.12.2` |
+| **WAN R2-R3** | `10.0.23.0/30` | R2 Se0/0/1 (`10.0.23.1`) [DCE] | R3 Se0/0/0 (`10.0.23.2`) [DTE] | `255.255.255.252` | `10.0.23.1` – `10.0.23.2` |
+| **WAN R1-R3** | `10.0.13.0/30` | R1 Se0/0/1 (`10.0.13.1`) [DCE] | R3 Se0/0/1 (`10.0.13.2`) [DTE] | `255.255.255.252` | `10.0.13.1` – `10.0.13.2` |
+
+#### Mental Subnetting Calculations
+- **LAN Subnets (`/24`)**:
+  - Mask: `255.255.255.0`, Block Size $= 256$.
+  - LAN 1: `192.168.1.0/24` | Usable: `192.168.1.1` - `192.168.1.254` | Broadcast: `192.168.1.255`.
+  - LAN 2: `192.168.2.0/24` | Usable: `192.168.2.1` - `192.168.2.254` | Broadcast: `192.168.2.255`.
+  - LAN 3: `192.168.3.0/24` | Usable: `192.168.3.1` - `192.168.3.254` | Broadcast: `192.168.3.255`.
+- **WAN Subnets (`/30`)**:
+  - Mask: `255.255.255.252`, Block Size $= 256 - 252 = 4$.
+  - WAN 12: `10.0.12.0/30` | Usable: `10.0.12.1` and `10.0.12.2` | Broadcast: `10.0.12.3`.
+  - WAN 23: `10.0.23.0/30` | Usable: `10.0.23.1` and `10.0.23.2` | Broadcast: `10.0.23.3`.
+  - WAN 13: `10.0.13.0/30` | Usable: `10.0.13.1` and `10.0.13.2` | Broadcast: `10.0.13.3`.
 
 #### Cisco IOS CLI Configurations
 
@@ -663,19 +982,22 @@ hostname R1
 
 ! LAN 1 Gateway
 interface FastEthernet0/0
+ description LAN-Subnet-1
  ip address 192.168.1.1 255.255.255.0
  no shutdown
 exit
 
-! Link to R2
+! Link to R2 (DCE)
 interface Serial0/0/0
+ description WAN-to-R2
  ip address 10.0.12.1 255.255.255.252
  clock rate 64000
  no shutdown
 exit
 
-! Link to R3
+! Link to R3 (DCE)
 interface Serial0/0/1
+ description WAN-to-R3
  ip address 10.0.13.1 255.255.255.252
  clock rate 64000
  no shutdown
@@ -698,18 +1020,21 @@ hostname R2
 
 ! LAN 2 Gateway
 interface FastEthernet0/0
+ description LAN-Subnet-2
  ip address 192.168.2.1 255.255.255.0
  no shutdown
 exit
 
-! Link to R1
+! Link to R1 (DTE)
 interface Serial0/0/0
+ description WAN-to-R1
  ip address 10.0.12.2 255.255.255.252
  no shutdown
 exit
 
-! Link to R3
+! Link to R3 (DCE)
 interface Serial0/0/1
+ description WAN-to-R3
  ip address 10.0.23.1 255.255.255.252
  clock rate 64000
  no shutdown
@@ -732,18 +1057,21 @@ hostname R3
 
 ! LAN 3 Gateway
 interface FastEthernet0/0
+ description LAN-Subnet-3
  ip address 192.168.3.1 255.255.255.0
  no shutdown
 exit
 
-! Link to R2
+! Link to R2 (DTE)
 interface Serial0/0/0
+ description WAN-to-R2
  ip address 10.0.23.2 255.255.255.252
  no shutdown
 exit
 
-! Link to R1
+! Link to R1 (DTE)
 interface Serial0/0/1
+ description WAN-to-R1
  ip address 10.0.13.2 255.255.255.252
  no shutdown
 exit
@@ -757,23 +1085,75 @@ end
 write memory
 ```
 
+##### Switch Configurations (Switch 1, Switch 2, Switch 3)
+```ios
+! Switch 1
+enable
+configure terminal
+hostname Switch1
+interface Fa0/1
+ description Uplink-to-R1-Fa0/0
+exit
+interface Fa0/2
+ description PC0-Host
+exit
+interface Fa0/3
+ description PC1-Host
+exit
+end
+
+! Switch 2
+enable
+configure terminal
+hostname Switch2
+interface Fa0/1
+ description Uplink-to-R2-Fa0/0
+exit
+interface Fa0/2
+ description PC2-Host
+exit
+interface Fa0/3
+ description PC3-Host
+exit
+end
+
+! Switch 3
+enable
+configure terminal
+hostname Switch3
+interface Fa0/1
+ description Uplink-to-R3-Fa0/0
+exit
+interface Fa0/2
+ description PC4-Host
+exit
+interface Fa0/3
+ description PC5-Host
+exit
+end
+```
+
 #### Full Mesh Routing Verification Matrix
 Every device can communicate with every other device across all 3 subnets:
 ```
-From PC in Subnet 1 -> ping Subnet 2 PC (192.168.2.10) [SUCCESS]
-From PC in Subnet 1 -> ping Subnet 3 PC (192.168.3.10) [SUCCESS]
-From PC in Subnet 2 -> ping Subnet 1 PC (192.168.1.10) [SUCCESS]
-From PC in Subnet 2 -> ping Subnet 3 PC (192.168.3.10) [SUCCESS]
-From PC in Subnet 3 -> ping Subnet 1 PC (192.168.1.10) [SUCCESS]
-From PC in Subnet 3 -> ping Subnet 2 PC (192.168.2.10) [SUCCESS]
+From PC0 (Subnet 1) -> ping PC1 (Same Switch): 192.168.1.11 [SUCCESS - Intra-LAN]
+From PC0 (Subnet 1) -> ping PC2 (Subnet 2):     192.168.2.10 [SUCCESS - Inter-LAN]
+From PC0 (Subnet 1) -> ping PC4 (Subnet 3):     192.168.3.10 [SUCCESS - Inter-LAN]
+From PC2 (Subnet 2) -> ping PC3 (Same Switch): 192.168.2.11 [SUCCESS - Intra-LAN]
+From PC2 (Subnet 2) -> ping PC0 (Subnet 1):     192.168.1.10 [SUCCESS - Inter-LAN]
+From PC2 (Subnet 2) -> ping PC4 (Subnet 3):     192.168.3.10 [SUCCESS - Inter-LAN]
+From PC4 (Subnet 3) -> ping PC5 (Same Switch): 192.168.3.11 [SUCCESS - Intra-LAN]
+From PC4 (Subnet 3) -> ping PC0 (Subnet 1):     192.168.1.10 [SUCCESS - Inter-LAN]
+From PC4 (Subnet 3) -> ping PC2 (Subnet 2):     192.168.2.10 [SUCCESS - Inter-LAN]
 ```
 
 ---
 
+<a id="bonus-exercise"></a>
 ### ⭐ Bonus Exercise: Advanced VLAN Segmentation & Inter-VLAN Routing
 
 #### Objective
-Implement an enterprise-grade VLAN segmentation and Inter-VLAN Routing architecture (**Router-on-a-Stick**) using **IEEE 802.1Q encapsulation**, isolating departments at Layer 2 while maintaining secure Layer 3 communication.
+Implement an enterprise-grade VLAN segmentation and Inter-VLAN Routing architecture (**Router-on-a-Stick**) using **IEEE 802.1Q encapsulation**, isolating departments at Layer 2 while maintaining secure Layer 3 communication across a single trunk link.
 
 #### Topology Diagram
 ```mermaid
@@ -787,12 +1167,12 @@ graph TD
     PC_MGMT["PC-Mgmt (VLAN 30)<br/>192.168.30.10"] ---|Access Fa0/30| SW1
 ```
 
-#### VLAN Addressing Schema
-| VLAN ID | Name | Subnet | Gateway IP | Switch Ports | PC Address |
-|:---|:---|:---|:---|:---|:---|
-| **VLAN 10** | Engineering | `192.168.10.0/24` | `192.168.10.1` | `Fa0/10` | `192.168.10.10` |
-| **VLAN 20** | Sales | `192.168.20.0/24` | `192.168.20.1` | `Fa0/20` | `192.168.20.10` |
-| **VLAN 30** | Management | `192.168.30.0/24` | `192.168.30.1` | `Fa0/30` | `192.168.30.10` |
+#### VLAN Addressing Schema & Mental Subnetting
+| VLAN ID | Name | Subnet | Gateway IP | Switch Ports | PC Address | Usable Range ($2^8 - 2 = 254$) |
+|:---|:---|:---|:---|:---|:---|:---|
+| **VLAN 10** | Engineering | `192.168.10.0/24` | `192.168.10.1` | `Fa0/10` | `192.168.10.10` | `192.168.10.1` – `192.168.10.254` |
+| **VLAN 20** | Sales | `192.168.20.0/24` | `192.168.20.1` | `Fa0/20` | `192.168.20.10` | `192.168.20.1` – `192.168.20.254` |
+| **VLAN 30** | Management | `192.168.30.0/24` | `192.168.30.1` | `Fa0/30` | `192.168.30.10` | `192.168.30.1` – `192.168.30.254` |
 
 #### Cisco IOS CLI Configurations
 
@@ -876,24 +1256,27 @@ end
 write memory
 ```
 
-#### Verification
+#### Verification Commands
 - From `PC-Eng` (`192.168.10.10`), ping `192.168.20.10` (VLAN 20) and `192.168.30.10` (VLAN 30).
-- Frames travel tagged with 802.1Q headers across the trunk to the router sub-interfaces and are routed between VLANs.
+- On Switch 1: `show vlan brief`, `show interfaces trunk`.
+- On Router 1: `show ip route`, `show ip interface brief`.
 
 ---
 
+<a id="audit-guide"></a>
 ## 🎓 Comprehensive Beginner-Friendly Audit Guide (Q&A)
 
 This section provides thorough, peer-audit-ready explanations with real-world analogies for every question in `audit.md`.
 
 ---
 
+<a id="audit-section-1"></a>
 ### Section 1: Physical Layer & Cabling (Exercise 1)
 
 #### 1. What is an RJ-45 cable?
 - **Definition**: **RJ-45** stands for **Registered Jack 45**. It is the standard modular physical connector used on twisted-pair Ethernet cables (Cat5e, Cat6, Cat6a) to interconnect computers, switches, and routers.
-- **Physical Construction**: The connector is an **8P8C** (8 Position, 8 Contact) plug housing **8 color-coded copper wires** arranged in 4 twisted pairs. The twisting reduces electromagnetic interference and crosstalk between adjacent wire pairs.
-- **Analogy**: Think of an RJ-45 connector as an 8-prong power cord for data. Just as a wall plug carries electrical voltage safely into an appliance, the RJ-45 plug seats 8 electrical contact pins delivering millivolt data pulses into a network interface card (NIC).
+- **Physical Construction**: The connector is an **8P8C** (8 Position, 8 Contact) plug housing **8 color-coded copper wires** arranged in 4 twisted pairs. The twisting cancels out electromagnetic interference (EMI) and crosstalk between adjacent wire pairs.
+- **Analogy**: Think of an RJ-45 connector as an 8-prong power cord for data. Just as a wall plug seats electrical pins safely into an outlet, the RJ-45 plug seats 8 gold-plated contact pins that deliver high-frequency millivolt pulses directly into a network interface card (NIC).
 
 #### 2. What is the difference between Straight-Through and Crossover cables?
 Network interfaces utilize specific pin assignments for transmitting (TX) and receiving (RX) data:
@@ -909,18 +1292,29 @@ Network interfaces utilize specific pin assignments for transmitting (TX) and re
 
 ##### Crossover Cable (T568A to T568B)
 - **Pinout**: Wires cross over between End A and End B:
-  - Pin 1 (TX+) on End A $\rightarrow$ Pin 3 (RX+) on End B
-  - Pin 2 (TX-) on End A $\rightarrow$ Pin 6 (RX-) on End B
-  - Pin 3 (RX+) on End A $\rightarrow$ Pin 1 (TX+) on End B
-  - Pin 6 (RX-) on End A $\rightarrow$ Pin 2 (TX-) on End B
+  - Pin 1 (TX+) on End A $ightarrow$ Pin 3 (RX+) on End B
+  - Pin 2 (TX-) on End A $ightarrow$ Pin 6 (RX-) on End B
+  - Pin 3 (RX+) on End A $ightarrow$ Pin 1 (TX+) on End B
+  - Pin 6 (RX-) on End A $ightarrow$ Pin 2 (TX-) on End B
 - **Application**: Used to connect **similar device tiers directly** without an intermediate switch:
   - PC to PC
   - Switch to Switch
   - Router to Router (or Router to PC)
 - **Analogy (Walkie-Talkies)**: If two people speak into walkie-talkies, Speaker A's mouth (TX) must transmit into Speaker B's ear (RX). If you connected mouth-to-mouth (Straight-Through between identical devices), neither party would hear the other! The crossover cable crosses mouth-to-ear so communication succeeds.
 
+#### 3. How are the IP addresses calculated?
+- **Binary Structure**: An IPv4 address contains 32 binary bits grouped into four 8-bit octets (e.g., `11000000.10101000.00000001.00001010` = `192.168.1.10`).
+- **Network vs Host Division**: The subnet mask indicates how many bits belong to the network prefix and how many remain for host addressing. A `/24` mask (`255.255.255.0`) designates 24 network bits and 8 host bits ($32 - 24 = 8$).
+- **Tool-Free Calculation Formula**:
+  1. **Magic Number (Block Size)** $= 256 - 	ext{Interesting Netmask Octet}$. For `/24`, $256 - 0 = 256$. For `/30`, $256 - 252 = 4$.
+  2. **Network ID** $= 	ext{Floor multiple of Block Size}$ (e.g., `192.168.1.0` or `10.0.0.0`). The Network ID is reserved to identify the subnet itself.
+  3. **Broadcast ID** $= 	ext{Next Subnet Network ID} - 1$ (e.g., `192.168.1.255` or `10.0.0.3`). The Broadcast address is reserved to address all hosts simultaneously.
+  4. **Usable Host Range** $= (	ext{Network ID} + 1)$ through $(	ext{Broadcast ID} - 1)$.
+  5. **Usable Host Capacity** $= 2^h - 2$, where $h$ is host bits (subtracting 2 for Network ID and Broadcast ID).
+
 ---
 
+<a id="audit-section-2"></a>
 ### Section 2: Switches vs Hubs (Exercise 2)
 
 #### 1. What is a Hub, how does it operate, and what is its role?
@@ -947,12 +1341,17 @@ Network interfaces utilize specific pin assignments for transmitting (TX) and re
 | **Duplex Mode** | Half-Duplex (CSMA/CD required) | Full-Duplex (Simultaneous send & receive) |
 | **Security** | Insecure (Trivial packet sniffing) | Secure (Traffic isolated to target link) |
 
+#### 4. What OSI Model Layers do Switches and Hubs operate on?
+- **Hub**: Operates strictly at **Layer 1 (Physical Layer)**. It deals purely with electrical voltages and physical signal repeating, with zero understanding of data framing or MAC addresses.
+- **Switch**: Operates primarily at **Layer 2 (Data Link Layer)**. It decodes Ethernet frame headers, inspects 48-bit MAC addresses, and makes forwarding decisions based on its CAM table.
+
 ---
 
+<a id="audit-section-3"></a>
 ### Section 3: Core Network Services (Exercise 3)
 
 #### 1. What is a Server?
-A **Server** is a computer system or software application that continuously listens on specific network ports to provide shared resources, data, or services (web pages, file storage, address allocation, name resolution) to requesting client endpoints.
+A **Server** is a dedicated computer system or daemon application that continuously listens on well-known network transport ports to provide shared resources, data, or services (such as web hosting, file transfers, address leasing, and domain name translation) to requesting client endpoints.
 
 #### 2. How does DHCP work? (The DORA Process)
 DHCP (**Dynamic Host Configuration Protocol**) automates IP addressing over **UDP Ports 67 (Server) and 68 (Client)** through the 4-step **DORA** sequence:
@@ -971,12 +1370,12 @@ DHCP (**Dynamic Host Configuration Protocol**) automates IP addressing over **UD
 4. **Acknowledge**: Server logs the lease in its database and confirms: *"Lease granted for 24 hours."*
 
 #### 3. What is DNS and what are the main record types?
-- **Definition**: The **Domain Name System** is the hierarchical, decentralized phonebook of the Internet, translating human-friendly names (`deep-in-net.com`) into computer-routable IP addresses (`192.168.1.99`).
+- **Definition**: The **Domain Name System** is the hierarchical, decentralized directory service of computer networks, translating human-friendly hostnames (`deep-in-net.com`) into routable IP addresses (`192.168.1.99`).
 - **Analogy**: You do not memorize your friend's 10-digit number; you tap "Alice" in your contacts list. DNS looks up the name and dials the numeric IP address.
 - **Key Record Types**:
-  - **`A` Record**: Maps a hostname directly to an IPv4 address (e.g., `deep-in-net.local` $\rightarrow$ `192.168.1.99`).
+  - **`A` Record**: Maps a hostname directly to an IPv4 address (e.g., `deep-in-net.local` $ightarrow$ `192.168.1.99`).
   - **`AAAA` Record**: Maps a hostname to an IPv6 address.
-  - **`CNAME` Record (Canonical Name)**: Creates an alias pointing one domain name to another domain name (e.g., `deep-in-net.com` $\rightarrow$ `deep-in-net.local`).
+  - **`CNAME` Record (Canonical Name)**: Creates an alias pointing one domain name to another domain name (e.g., `deep-in-net.com` $ightarrow$ `deep-in-net.local`).
   - **`MX` Record**: Identifies the mail exchange server handling email for a domain.
 
 #### 4. HTTP vs HTTPS: What is the difference?
@@ -996,7 +1395,7 @@ DHCP (**Dynamic Host Configuration Protocol**) automates IP addressing over **UD
 
 #### 6. TCP vs UDP
 - **TCP (Transmission Control Protocol)**:
-  - Connection-oriented with a **3-Way Handshake** (SYN $\rightarrow$ SYN-ACK $\rightarrow$ ACK).
+  - Connection-oriented with a **3-Way Handshake** (SYN $ightarrow$ SYN-ACK $ightarrow$ ACK).
   - Guarantees ordered delivery, error checking, flow control, and automatic retransmission of lost packets.
   - Used for: HTTP/HTTPS (443), FTP (20/21), SSH (22).
 - **UDP (User Datagram Protocol)**:
@@ -1004,9 +1403,14 @@ DHCP (**Dynamic Host Configuration Protocol**) automates IP addressing over **UD
   - Prioritizes minimal latency over reliability.
   - Used for: DNS (53), DHCP (67/68), VoIP, live video streaming.
 
-#### 7. What is a Port and Protocol Mapping Table
+#### 7. At which OSI Model Layer do TCP and UDP operate?
+TCP and UDP operate exclusively at **Layer 4 (Transport Layer)** of the OSI Model. The Transport Layer is responsible for end-to-end communication, segmentation, port addressing, flow control, and reliability.
+
+#### 8. What is a Port in networking and its function?
 A **Port** is a 16-bit numerical abstraction (ranging from `0` to `65535`) allowing an operating system to demultiplex incoming network packets to the exact running application.
 - **Analogy**: The IP address identifies the street address of an apartment building; the port number identifies the specific apartment unit inside.
+
+#### 9. Protocol Port and OSI Model Layer Mapping Table
 
 | Protocol | Service Name | Port Number | Transport Layer | OSI Layer |
 |:---|:---|:---|:---|:---|
@@ -1018,6 +1422,7 @@ A **Port** is a 16-bit numerical abstraction (ranging from `0` to `65535`) allow
 
 ---
 
+<a id="audit-section-4"></a>
 ### Section 4: Routers & Routing (Exercises 4–8)
 
 #### 1. What is a Router and what is its role?
@@ -1032,10 +1437,13 @@ A **Router** is a Layer 3 (Network layer) device responsible for interconnecting
 | **Broadcast Handling**| Forwards broadcasts to all ports | Drops broadcasts (Terminates broadcast domain) |
 | **Forwarding Table** | CAM / MAC Address Table | **Routing Table** |
 
-#### 3. What is a Default Gateway?
+#### 3. At which OSI Model Layer does a Router operate?
+A router operates at **Layer 3 (Network Layer)** of the OSI Model. It decapsulates the Layer 2 Ethernet frame to read the Layer 3 IPv4/IPv6 packet header, inspects the destination IP address, re-encapsulates the packet into a new Layer 2 frame for the egress interface, and decrements the TTL (Time to Live) field.
+
+#### 4. What is a Default Gateway?
 A **Default Gateway** is the IP address of the local router interface attached to the host's subnet. It functions as the "exit door" for any packet whose destination IP address lies outside the local subnet. Without a configured gateway, an endpoint can only communicate with devices on its own local LAN segment.
 
-#### 4. What is a Routing Table?
+#### 5. What is a Routing Table and what is its role?
 A **Routing Table** is a data structure stored in router memory that lists destination IP networks, subnet masks, next-hop IP addresses, and exit interfaces.
 - When an IP packet arrives, the router extracts the destination IP, matches it against the routing table using the longest-prefix match rule, and forwards the packet to the corresponding next-hop address.
 - **Static Route Syntax (Cisco IOS)**:
@@ -1045,6 +1453,29 @@ A **Routing Table** is a data structure stored in router memory that lists desti
 
 ---
 
+<a id="audit-section-5"></a>
+### Section 5: Live Recreation & Bonus Defense
+
+#### 1. Passing the Exercise 7 Live Recreation Exam Without Error
+- **Time Target**: Under 5 minutes.
+- **Key Actions**:
+  1. Drop 2x 2811 Routers, 2x 2960 Switches, 4x PCs.
+  2. Answer `no` to initial auto-config dialogs.
+  3. Power off both routers, install `WIC-2T` in slot `WIC 0`, power back on.
+  4. Cable PCs to switches, switches to `Fa0/0`, and connect Serial DCE from R1 (clicked first) to R2.
+  5. Paste pre-verified CLI scripts for R1 (`Fa0/0`: `172.16.1.1/24`, `Se0/0/0`: `10.1.1.1/30` with `clock rate 64000`, `ip route 172.16.2.0 ... 10.1.1.2`) and R2 (`Fa0/0`: `172.16.2.1/24`, `Se0/0/0`: `10.1.1.2/30`, `ip route 172.16.1.0 ... 10.1.1.1`).
+  6. Assign static IPs to PCs and execute `ping 172.16.2.10` from `PC0`.
+
+#### 2. Defending the Bonus Implementation (Router-on-a-Stick / 802.1Q VLANs)
+- **What was implemented?**: IEEE 802.1Q Inter-VLAN Routing (**Router-on-a-Stick**) segmenting 3 departments (Engineering VLAN 10, Sales VLAN 20, Management VLAN 30) through a single physical trunk link to a Cisco Router.
+- **Why is this bonus significant?**:
+  1. **Hardware Efficiency**: Eliminates the need for multiple physical router interfaces for every department, saving cost and port density.
+  2. **Security & Segmentation**: Isolate broadcast domains at Layer 2 while enforcing routed access policies at Layer 3.
+  3. **Industry Standard**: 802.1Q VLAN trunking is the foundational architecture of enterprise enterprise networks and cloud virtual private clouds (VPCs).
+
+---
+
+<a id="verification-suite"></a>
 ## ⚡ Automated Verification Suite (`verify_topology.sh`)
 
 An automated verification test script is included in the root directory to validate file structures, syntax, IP schemas, and subnetting logic:
@@ -1063,8 +1494,10 @@ chmod +x verify_topology.sh
 3. **Cisco IOS Syntax Linter**: Checks syntax of interface configs, IP assignments, clock rates, and `ip route` commands.
 4. **Service Rules Linter**: Confirms static IPs, DHCP pool boundaries, HTTPS isolation, and FTP user permissions.
 5. **Full Mesh Routing Matrix**: Confirms non-blocking route reachability across all routers for Exercise 8.
+6. **Documentation & Anchor Linter**: Validates that all exercises include topology diagrams, Cisco IOS configurations, mental subnetting calculations, and non-broken anchors.
 
 ---
 
+<a id="license"></a>
 ## 📄 License
 This repository is open-sourced under the MIT License for educational and peer audit preparation purposes.
