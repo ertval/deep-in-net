@@ -80,11 +80,31 @@ REQUIRED_FILES=(
     "audit.md"
 )
 
+EMPTY_BLOB_HASH="e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+
 for file in "${REQUIRED_FILES[@]}"; do
-    if [ -f "$file" ]; then
-        test_pass "Deliverable present: $file"
-    else
+    if [ ! -f "$file" ]; then
         test_fail "Deliverable missing: $file" "File must exist in repository root"
+    elif [ ! -s "$file" ]; then
+        test_fail "Deliverable empty (0 bytes): $file" "File exists but has zero size; .pkt must be a real Packet Tracer binary saved from the GUI"
+    else
+        case "$file" in
+            *.pkt)
+                if command -v git >/dev/null 2>&1; then
+                    ACTUAL_HASH="$(git hash-object "$file" 2>/dev/null || true)"
+                    if [ "$ACTUAL_HASH" = "$EMPTY_BLOB_HASH" ]; then
+                        test_fail "Deliverable is empty-blob: $file" "git hash-object matches empty blob e69de29; rebuild in Packet Tracer GUI"
+                    else
+                        test_pass "Deliverable present and non-empty: $file"
+                    fi
+                else
+                    test_pass "Deliverable present and non-empty: $file"
+                fi
+                ;;
+            *)
+                test_pass "Deliverable present and non-empty: $file"
+                ;;
+        esac
     fi
 done
 
@@ -212,31 +232,30 @@ fi
 # ==============================================================================
 log_header "TEST SUITE 4: Exercise 3 Network Services & Protocol Rules"
 
-# 1. DHCP Server IP & Range
-EX3_DHCP_IP="192.168.1.2"
-EX3_DHCP_START="192.168.1.100"
-test_pass "DHCP Server Static IP verified: $EX3_DHCP_IP"
-test_pass "DHCP Dynamic Pool Start IP verified: $EX3_DHCP_START"
+log_info "NOTE: .pkt binaries cannot be inspected statically; live Packet Tracer check REQUIRED (MANUAL-ONLY)."
+log_info "Static checks below verify README documents the Ex03 service spec; open ex03.pkt to prove live behavior."
 
-# 2. HTTPS Server IP & isolation
-EX3_HTTPS_IP="192.168.1.99"
-test_pass "HTTPS Server Static IP verified: $EX3_HTTPS_IP"
-test_pass "HTTPS Service enabled on port 443 with 'hello' payload"
-test_pass "HTTP Service (Port 80) disabled on HTTPS server"
+check_readme() {
+    local desc="$1"
+    local pattern="$2"
+    if grep -q -- "$pattern" README.md; then
+        test_pass "$desc"
+    else
+        test_fail "$desc" "Pattern '$pattern' not found in README.md"
+    fi
+}
 
-# 3. FTP Server User & Permissions
-EX3_FTP_IP="192.168.1.3"
-EX3_FTP_USER="deepinnet"
-EX3_FTP_PERMS="RWDNL"
-test_pass "FTP Server Static IP verified: $EX3_FTP_IP"
-test_pass "FTP Credentials verified: Username '$EX3_FTP_USER'"
-test_pass "FTP Permissions verified: Full '$EX3_FTP_PERMS' (Read, Write, Delete, Name, List)"
-
-# 4. DNS Server Mapping
-EX3_DNS_IP="192.168.1.4"
-test_pass "DNS Server Static IP verified: $EX3_DNS_IP"
-test_pass "DNS A Record mapped: 'deep-in-net.local' -> $EX3_HTTPS_IP"
-test_pass "DNS CNAME Record mapped: 'deep-in-net.com' -> 'deep-in-net.local'"
+check_readme "DHCP Server Static IP documented: 192.168.1.2" "192.168.1.2"
+check_readme "DHCP Dynamic Pool Start IP documented: 192.168.1.100" "192.168.1.100"
+check_readme "HTTPS Server Static IP documented: 192.168.1.99" "192.168.1.99"
+check_readme "HTTPS payload documented: hello" "hello"
+check_readme "FTP Server Static IP documented: 192.168.1.3" "192.168.1.3"
+check_readme "FTP username documented: deepinnet" "deepinnet"
+check_readme "FTP permissions documented: RWDNL" "RWDNL"
+check_readme "DNS Server Static IP documented: 192.168.1.4" "192.168.1.4"
+check_readme "DNS A Record documented: deep-in-net.local" "deep-in-net.local"
+check_readme "DNS CNAME Record documented: deep-in-net.com" "deep-in-net.com"
+log_info "MANUAL-ONLY: confirm DHCP/DNS/HTTPS/FTP live in Packet Tracer GUI (ex03.pkt) during audit."
 
 # ==============================================================================
 # TEST SUITE 5: Cisco IOS Command Syntax & Static Routing Validation
@@ -244,15 +263,36 @@ test_pass "DNS CNAME Record mapped: 'deep-in-net.com' -> 'deep-in-net.local'"
 log_header "TEST SUITE 5: Cisco IOS CLI Syntax & Static Routing Verification"
 
 python3 - << 'EOF'
+import re
 import sys
 
-# Cisco IOS Command Syntax Linter
+# Cisco IOS Command Syntax Linter (applied to README.md ```ios blocks)
 def validate_ios_commands(config_text):
     errors = []
     lines = [line.strip() for line in config_text.splitlines() if line.strip() and not line.strip().startswith("!")]
     for line in lines:
+        # Skip documentation template placeholders, e.g. ip route <destination> <mask> <next-hop>
+        if "<" in line and ">" in line:
+            continue
+        low = line.lower()
         valid = False
-        if line in ["enable", "configure terminal", "exit", "end", "write memory", "no shutdown"]:
+        if line in ["enable", "configure terminal", "exit", "end", "write memory", "no shutdown", "no ip address"]:
+            valid = True
+        elif low.startswith("hostname ") and len(line.split()) == 2:
+            valid = True
+        elif low.startswith("description "):
+            valid = True
+        elif low.startswith("show "):
+            valid = True
+        elif low.startswith("vlan ") and len(line.split()) == 2 and line.split()[1].isdigit():
+            valid = True
+        elif low.startswith("name ") and len(line.split()) >= 2:
+            valid = True
+        elif low.startswith("switchport mode "):
+            valid = True
+        elif low.startswith("switchport access vlan "):
+            valid = True
+        elif low.startswith("encapsulation dot1q "):
             valid = True
         elif line.startswith("interface "):
             parts = line.split()
@@ -286,155 +326,26 @@ def validate_ios_commands(config_text):
             errors.append(f"Invalid or unrecognized Cisco IOS syntax: '{line}'")
     return errors
 
-# Ex06 Configuration Snippets
-ex06_r1 = """
-enable
-configure terminal
-interface FastEthernet0/0
- ip address 192.168.10.1 255.255.255.0
- no shutdown
-exit
-interface Serial0/0/0
- ip address 10.0.0.1 255.255.255.252
- clock rate 64000
- no shutdown
-exit
-ip route 192.168.20.0 255.255.255.0 10.0.0.2
-end
-"""
+with open("README.md", "r") as f:
+    readme = f.read()
 
-ex06_r2 = """
-enable
-configure terminal
-interface FastEthernet0/0
- ip address 192.168.20.1 255.255.255.0
- no shutdown
-exit
-interface Serial0/0/0
- ip address 10.0.0.2 255.255.255.252
- no shutdown
-exit
-ip route 192.168.10.0 255.255.255.0 10.0.0.1
-end
-"""
+blocks = re.findall(r"```ios(.*?)```", readme, re.DOTALL)
+if not blocks:
+    print("  [\033[31m\033[1mFAIL\033[0m] No ```ios blocks found in README.md to lint")
+    sys.exit(1)
 
-# Ex07 Configuration Snippets (Live Audit)
-ex07_r1 = """
-enable
-configure terminal
-interface FastEthernet0/0
- ip address 172.16.1.1 255.255.255.0
- no shutdown
-exit
-interface Serial0/0/0
- ip address 10.1.1.1 255.255.255.252
- clock rate 64000
- no shutdown
-exit
-ip route 172.16.2.0 255.255.255.0 10.1.1.2
-end
-"""
-
-ex07_r2 = """
-enable
-configure terminal
-interface FastEthernet0/0
- ip address 172.16.2.1 255.255.255.0
- no shutdown
-exit
-interface Serial0/0/0
- ip address 10.1.1.2 255.255.255.252
- no shutdown
-exit
-ip route 172.16.1.0 255.255.255.0 10.1.1.1
-end
-"""
-
-# Ex08 Configuration Snippets (Full Mesh Static Routing)
-ex08_r1 = """
-enable
-configure terminal
-interface FastEthernet0/0
- ip address 192.168.1.1 255.255.255.0
- no shutdown
-exit
-interface Serial0/0/0
- ip address 10.0.12.1 255.255.255.252
- clock rate 64000
- no shutdown
-exit
-interface Serial0/0/1
- ip address 10.0.13.1 255.255.255.252
- clock rate 64000
- no shutdown
-exit
-ip route 192.168.2.0 255.255.255.0 10.0.12.2
-ip route 192.168.3.0 255.255.255.0 10.0.13.2
-ip route 10.0.23.0 255.255.255.252 10.0.12.2
-end
-"""
-
-ex08_r2 = """
-enable
-configure terminal
-interface FastEthernet0/0
- ip address 192.168.2.1 255.255.255.0
- no shutdown
-exit
-interface Serial0/0/0
- ip address 10.0.12.2 255.255.255.252
- no shutdown
-exit
-interface Serial0/0/1
- ip address 10.0.23.1 255.255.255.252
- clock rate 64000
- no shutdown
-exit
-ip route 192.168.1.0 255.255.255.0 10.0.12.1
-ip route 192.168.3.0 255.255.255.0 10.0.23.2
-ip route 10.0.13.0 255.255.255.252 10.0.12.1
-end
-"""
-
-ex08_r3 = """
-enable
-configure terminal
-interface FastEthernet0/0
- ip address 192.168.3.1 255.255.255.0
- no shutdown
-exit
-interface Serial0/0/0
- ip address 10.0.23.2 255.255.255.252
- no shutdown
-exit
-interface Serial0/0/1
- ip address 10.0.13.2 255.255.255.252
- no shutdown
-exit
-ip route 192.168.1.0 255.255.255.0 10.0.13.1
-ip route 192.168.2.0 255.255.255.0 10.0.23.1
-ip route 10.0.12.0 255.255.255.252 10.0.13.1
-end
-"""
-
-all_configs = [
-    ("Ex06 Router 1", ex06_r1),
-    ("Ex06 Router 2", ex06_r2),
-    ("Ex07 Router 1 (Live Audit)", ex07_r1),
-    ("Ex07 Router 2 (Live Audit)", ex07_r2),
-    ("Ex08 Router 1 (Mesh)", ex08_r1),
-    ("Ex08 Router 2 (Mesh)", ex08_r2),
-    ("Ex08 Router 3 (Mesh)", ex08_r3),
-]
+print(f"  [\033[36mINFO\033[0m] Found {len(blocks)} ```ios blocks in README.md; linting actual documented configs")
 
 has_error = False
-for name, cfg in all_configs:
+for idx, cfg in enumerate(blocks, 1):
     errs = validate_ios_commands(cfg)
+    first = next((l.strip() for l in cfg.splitlines() if l.strip() and not l.strip().startswith("!")), f"block {idx}")
+    preview = (first[:60] + "...") if len(first) > 60 else first
     if errs:
         has_error = True
-        print(f"  [\033[31m\033[1mFAIL\033[0m] {name} syntax errors: {errs}")
+        print(f"  [\033[31m\033[1mFAIL\033[0m] README ```ios block #{idx} ('{preview}') syntax errors: {errs}")
     else:
-        print(f"  [\033[32m\033[1mPASS\033[0m] Cisco IOS CLI Syntax validated for {name}")
+        print(f"  [\033[32m\033[1mPASS\033[0m] README ```ios block #{idx} ('{preview}') syntax OK")
 
 if has_error:
     sys.exit(1)

@@ -39,8 +39,8 @@ cd /home/ertval/code/zone-modules/deep-in-net
 # 2. Verify repository structure
 ls -la docs/requirements/
 
-# 3. Create placeholder .pkt files for submission compliance
-touch ex01.pkt ex02.pkt ex03.pkt ex04.pkt ex05.pkt ex06.pkt ex07.pkt ex08.pkt bonus.pkt
+# 3. Packet Tracer .pkt files must be constructed and saved from Cisco Packet Tracer GUI
+# (Placeholder/empty files are rejected by verify_topology.sh)
 
 # 4. Verify directory listing matches audit requirements
 ls -1 ex*.pkt bonus.pkt README.md

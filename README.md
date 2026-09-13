@@ -3,7 +3,6 @@
 ![Cisco Packet Tracer](https://img.shields.io/badge/Cisco_Packet_Tracer-v8.x-005073?style=for-the-badge&logo=cisco&logoColor=white)
 ![Networking](https://img.shields.io/badge/Domain-Networking%20%26%20DevOps-008080?style=for-the-badge&logo=diagramsdotnet)
 ![OSI Model](https://img.shields.io/badge/Framework-OSI%207--Layer%20Model-4B0082?style=for-the-badge)
-![Status](https://img.shields.io/badge/Audit-100%25%20Passing-brightgreen?style=for-the-badge)
 ![Automated Verification](https://img.shields.io/badge/Verification-Automated%20CI%2FCD%20Ready-blue?style=for-the-badge)
 
 Welcome to **deep-in-net**! 🚀 This repository contains complete solutions, topologies, Cisco IOS CLI configurations, step-by-step guides, mental subnetting calculations, and peer-audit cheat sheets for the **deep-in-net** networking module using **Cisco Packet Tracer**.
@@ -512,7 +511,7 @@ show ip route
 From `PC0`:
 ```cmd
 ping 192.168.2.10
-traceroute 192.168.2.10
+tracert 192.168.2.10
 ```
 *Note*: The first ping packet may timeout due to initial ARP discovery; subsequent packets return `Reply from 192.168.2.10: bytes=32 time<1ms TTL=127`.
 
@@ -729,7 +728,7 @@ C    192.168.10.0/24 is directly connected, FastEthernet0/0
 From `PC1` (`192.168.10.10`):
 ```cmd
 ping 192.168.20.10
-traceroute 192.168.20.10
+tracert 192.168.20.10
 ```
 
 ---
@@ -893,15 +892,15 @@ write memory
    ```cmd
    ping 172.16.1.11
    ping 172.16.2.10
-   traceroute 172.16.2.10
+   tracert 172.16.2.10
    ```
 2. On `R1` CLI:
    ```ios
    show ip interface brief
    show ip route
-   show controllers serial0/0/0
+   show controllers serial 0/0/0
    ```
-   > `show controllers serial0/0/0` confirms that `DCE V.35, clock rate 64000` is active on R1.
+   > `show controllers serial 0/0/0` confirms that `DCE V.35, clock rate 64000` is active on R1.
 
 ---
 

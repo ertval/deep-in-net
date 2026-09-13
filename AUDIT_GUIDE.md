@@ -116,7 +116,7 @@ Think of this like an architectural blueprint review before building constructio
 ```bash
 tree deep-in-net/
 # or
-ls -la /home/ertval/code/zone-modules/deep-in-net/
+ls -la
 ```
 
 #### Expected Output
@@ -615,7 +615,7 @@ ightarrow$ Router `Fa0/1` (`192.168.2.1`).
 #### Verification Commands (PC0 Command Prompt)
 ```cmd
 ping 192.168.2.10
-traceroute 192.168.2.10
+tracert 192.168.2.10
 ```
 
 #### Expected Output
@@ -710,7 +710,7 @@ ightarrow$ `PC2` (`192.168.20.10`).
 #### Verification Commands (PC1 Command Prompt)
 ```cmd
 ping 192.168.20.10
-traceroute 192.168.20.10
+tracert 192.168.20.10
 ```
 
 #### Expected Output
@@ -1118,7 +1118,7 @@ show ip interface brief
 From `PC-Eng` (`192.168.10.10`):
 ```cmd
 ping 192.168.20.10
-traceroute 192.168.30.10
+tracert 192.168.30.10
 ```
 
 #### 6. Why This Bonus Deserves Full Credit
@@ -1169,7 +1169,7 @@ ightarrow$ Authoritative), caches the answer, and returns it to the client.
 ---
 
 ## 🏆 Final Audit Readiness Verification
-- [x] All 10 `.pkt` files present in root (`ex01.pkt` – `ex08.pkt`, `bonus.pkt`).
+- [x] All 9 `.pkt` files present in root (`ex01.pkt` – `ex08.pkt`, `bonus.pkt`).
 - [x] `README.md`, `audit.md`, and `AUDIT_GUIDE.md` present and verified.
 - [x] Automated test suite passing 56/56 checks via `./verify_topology.sh`.
 - [x] 5-Minute Live Exam speed-run sequence memorized (Routers, Switches, PCs, WIC-2T, Cables, CLI, IPs, Fast-Forward).
