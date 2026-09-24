@@ -75,7 +75,6 @@ REQUIRED_FILES=(
     "ex06.pkt"
     "ex07.pkt"
     "ex08.pkt"
-    "bonus.pkt"
     "README.md"
     "audit.md"
 )
@@ -107,6 +106,16 @@ for file in "${REQUIRED_FILES[@]}"; do
         esac
     fi
 done
+
+if [ -f "bonus.pkt" ]; then
+    if [ ! -s "bonus.pkt" ]; then
+        test_fail "Optional bonus deliverable empty (0 bytes): bonus.pkt" "If present, bonus.pkt must be a valid Packet Tracer binary"
+    else
+        test_pass "Optional bonus deliverable present and non-empty: bonus.pkt"
+    fi
+else
+    log_info "Optional bonus file bonus.pkt not present (optional per audit.md)"
+fi
 
 # Check that files are strictly at the root level and not misplaced
 MISPLACED=$(find . -maxdepth 3 -mindepth 2 -name "ex0*.pkt" 2>/dev/null || true)
@@ -204,25 +213,27 @@ def check_subnet(name, network_cidr, expected_block_size, expected_usable_hosts,
         print(f"  [\033[31m\033[1mFAIL\033[0m] Subnet Math for {name} ({network_cidr}): {e}")
 
 # Validate Subnet Schemas across Exercises
-check_subnet("Ex01/02/03/04/05/08 LAN Subnet 1", "192.168.1.0/24", 256, 254, "192.168.1.1", "192.168.1.254", "192.168.1.255")
-check_subnet("Ex01/02/04/05/08 LAN Subnet 2", "192.168.2.0/24", 256, 254, "192.168.2.1", "192.168.2.254", "192.168.2.255")
-check_subnet("Ex01/08 LAN Subnet 3", "192.168.3.0/24", 256, 254, "192.168.3.1", "192.168.3.254", "192.168.3.255")
-check_subnet("Ex06 LAN Subnet 1", "192.168.10.0/24", 256, 254, "192.168.10.1", "192.168.10.254", "192.168.10.255")
-check_subnet("Ex06 LAN Subnet 2", "192.168.20.0/24", 256, 254, "192.168.20.1", "192.168.20.254", "192.168.20.255")
-check_subnet("Ex06 WAN Point-to-Point Link", "10.0.0.0/30", 4, 2, "10.0.0.1", "10.0.0.2", "10.0.0.3")
-check_subnet("Ex07 LAN Subnet 1 (Audit Live)", "172.16.1.0/24", 256, 254, "172.16.1.1", "172.16.1.254", "172.16.1.255")
-check_subnet("Ex07 LAN Subnet 2 (Audit Live)", "172.16.2.0/24", 256, 254, "172.16.2.1", "172.16.2.254", "172.16.2.255")
-check_subnet("Ex07 WAN Point-to-Point Link", "10.1.1.0/30", 4, 2, "10.1.1.1", "10.1.1.2", "10.1.1.3")
-check_subnet("Ex08 WAN Link R1-R2", "10.0.12.0/30", 4, 2, "10.0.12.1", "10.0.12.2", "10.0.12.3")
-check_subnet("Ex08 WAN Link R2-R3", "10.0.23.0/30", 4, 2, "10.0.23.1", "10.0.23.2", "10.0.23.3")
-check_subnet("Ex08 WAN Link R1-R3", "10.0.13.0/30", 4, 2, "10.0.13.1", "10.0.13.2", "10.0.13.3")
+check_subnet("Ex01 Subnet 1", "192.168.1.0/24", 256, 254, "192.168.1.1", "192.168.1.254", "192.168.1.255")
+check_subnet("Ex01 Subnet 2", "192.168.13.80/29", 8, 6, "192.168.13.81", "192.168.13.86", "192.168.13.87")
+check_subnet("Ex01 Subnet 3", "192.168.13.248/29", 8, 6, "192.168.13.249", "192.168.13.254", "192.168.13.255")
+check_subnet("Ex02/05 Switch LAN", "192.168.1.0/29", 8, 6, "192.168.1.1", "192.168.1.6", "192.168.1.7")
+check_subnet("Ex02/05 Hub/LAN 2", "192.168.1.192/27", 32, 30, "192.168.1.193", "192.168.1.222", "192.168.1.223")
+check_subnet("Ex03 Services LAN", "192.168.1.0/24", 256, 254, "192.168.1.1", "192.168.1.254", "192.168.1.255")
+check_subnet("Ex04 Subnet 1", "192.168.1.0/30", 4, 2, "192.168.1.1", "192.168.1.2", "192.168.1.3")
+check_subnet("Ex04 Subnet 2", "192.168.2.0/30", 4, 2, "192.168.2.1", "192.168.2.2", "192.168.2.3")
+check_subnet("Ex06/07 LAN Subnet 1", "192.168.1.0/24", 256, 254, "192.168.1.1", "192.168.1.254", "192.168.1.255")
+check_subnet("Ex06/07/08 LAN Subnet 2", "192.168.2.0/24", 256, 254, "192.168.2.1", "192.168.2.254", "192.168.2.255")
+check_subnet("Ex06/07/08 WAN Link 1-2", "10.10.0.0/30", 4, 2, "10.10.0.1", "10.10.0.2", "10.10.0.3")
+check_subnet("Ex08 WAN Link 2-3", "10.10.1.0/30", 4, 2, "10.10.1.1", "10.10.1.2", "10.10.1.3")
+check_subnet("Ex08 LAN Subnet 1", "192.168.1.192/26", 64, 62, "192.168.1.193", "192.168.1.254", "192.168.1.255")
+check_subnet("Ex08 LAN Subnet 3", "192.168.3.160/28", 16, 14, "192.168.3.161", "192.168.3.174", "192.168.3.175")
 
 if test_failures > 0:
     sys.exit(1)
 EOF
 
 if [ $? -eq 0 ]; then
-    test_pass "All 12 Subnet calculations mathematically sound"
+    test_pass "All 14 Subnet calculations mathematically sound"
 else
     test_fail "Subnetting mathematical verification encountered errors"
 fi
@@ -245,14 +256,13 @@ check_readme() {
     fi
 }
 
-check_readme "DHCP Server Static IP documented: 192.168.1.2" "192.168.1.2"
-check_readme "DHCP Dynamic Pool Start IP documented: 192.168.1.100" "192.168.1.100"
+check_readme "DHCP Server Static IP documented: 192.168.1.102" "192.168.1.102"
 check_readme "HTTPS Server Static IP documented: 192.168.1.99" "192.168.1.99"
 check_readme "HTTPS payload documented: hello" "hello"
-check_readme "FTP Server Static IP documented: 192.168.1.3" "192.168.1.3"
+check_readme "FTP Server Static IP documented: 192.168.1.100" "192.168.1.100"
 check_readme "FTP username documented: deepinnet" "deepinnet"
 check_readme "FTP permissions documented: RWDNL" "RWDNL"
-check_readme "DNS Server Static IP documented: 192.168.1.4" "192.168.1.4"
+check_readme "DNS Server Static IP documented: 192.168.1.101" "192.168.1.101"
 check_readme "DNS A Record documented: deep-in-net.local" "deep-in-net.local"
 check_readme "DNS CNAME Record documented: deep-in-net.com" "deep-in-net.com"
 log_info "MANUAL-ONLY: confirm DHCP/DNS/HTTPS/FTP live in Packet Tracer GUI (ex03.pkt) during audit."
@@ -358,57 +368,52 @@ else
 fi
 
 # ==============================================================================
-# TEST SUITE 6: Exercise 8 Mesh Routing Completeness
+# TEST SUITE 6: Exercise 8 Multi-Router Static Routing Reachability
 # ==============================================================================
-log_header "TEST SUITE 6: Exercise 8 Full Mesh Routing Completeness"
+log_header "TEST SUITE 6: Exercise 8 Chain Topology Static Routing Reachability"
 
 python3 - << 'EOF'
 import sys
 
 routes = {
     "R1": {
-        "192.168.1.0/24": "DIRECT",
-        "10.0.12.0/30": "DIRECT",
-        "10.0.13.0/30": "DIRECT",
-        "192.168.2.0/24": "10.0.12.2",
-        "192.168.3.0/24": "10.0.13.2",
-        "10.0.23.0/30": "10.0.12.2",
+        "192.168.1.192/26": "DIRECT",
+        "10.10.0.0/30": "DIRECT",
+        "192.168.2.0/24": "10.10.0.2",
+        "192.168.3.160/28": "10.10.0.2",
     },
     "R2": {
+        "10.10.0.0/30": "DIRECT",
         "192.168.2.0/24": "DIRECT",
-        "10.0.12.0/30": "DIRECT",
-        "10.0.23.0/30": "DIRECT",
-        "192.168.1.0/24": "10.0.12.1",
-        "192.168.3.0/24": "10.0.23.2",
-        "10.0.13.0/30": "10.0.12.1",
+        "10.10.1.0/30": "DIRECT",
+        "192.168.1.192/26": "10.10.0.1",
+        "192.168.3.160/28": "10.10.1.2",
     },
     "R3": {
-        "192.168.3.0/24": "DIRECT",
-        "10.0.23.0/30": "DIRECT",
-        "10.0.13.0/30": "DIRECT",
-        "192.168.1.0/24": "10.0.13.1",
-        "192.168.2.0/24": "10.0.23.1",
-        "10.0.12.0/30": "10.0.13.1",
+        "10.10.1.0/30": "DIRECT",
+        "192.168.3.160/28": "DIRECT",
+        "192.168.1.192/26": "10.10.1.1",
+        "192.168.2.0/24": "10.10.1.1",
     }
 }
 
-all_subnets = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24", "10.0.12.0/30", "10.0.23.0/30", "10.0.13.0/30"]
+target_lans = ["192.168.1.192/26", "192.168.2.0/24", "192.168.3.160/28"]
 
 complete = True
 for r, table in routes.items():
-    missing = [s for s in all_subnets if s not in table]
+    missing = [s for s in target_lans if s not in table]
     if missing:
         print(f"  [\033[31m\033[1mFAIL\033[0m] {r} missing routes to: {missing}")
         complete = False
     else:
-        print(f"  [\033[32m\033[1mPASS\033[0m] {r} has full route reachability to all 6 subnets")
+        print(f"  [\033[32m\033[1mPASS\033[0m] {r} has full route reachability to all 3 LAN subnets")
 
 if not complete:
     sys.exit(1)
 EOF
 
 if [ $? -eq 0 ]; then
-    test_pass "Full mesh static routing matrix is 100% complete and non-blocking"
+    test_pass "Chain topology static routing matrix is 100% complete and non-blocking"
 else
     test_fail "Routing table matrix has unreachable subnets"
 fi

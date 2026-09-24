@@ -57,67 +57,67 @@ which packettracer || echo "Cisco Packet Tracer executable not found in PATH. In
 - **Topology**: 3 PC pairs (`PC0` <-> `PC1`, `PC2` <-> `PC3`, `PC4` <-> `PC5`).
 - **Cable**: Copper Crossover Cable (RJ-45 T568A to T568B) for direct host-to-host links.
 - **IP Addressing Schema**:
-  - `PC0`: `192.168.1.10 / 255.255.255.0` | `PC1`: `192.168.1.11 / 255.255.255.0`
-  - `PC2`: `192.168.2.10 / 255.255.255.0` | `PC3`: `192.168.2.11 / 255.255.255.0`
-  - `PC4`: `192.168.3.10 / 255.255.255.0` | `PC5`: `192.168.3.11 / 255.255.255.0`
+  - `PC0`: `192.168.1.3 / 255.255.255.0` | `PC1`: `192.168.1.4 / 255.255.255.0` (Subnet: `192.168.1.0/24`)
+  - `PC2`: `192.168.13.81 / 255.255.255.248` | `PC3`: `192.168.13.82 / 255.255.255.248` (Subnet: `192.168.13.80/29`)
+  - `PC4`: `192.168.13.254 / 255.255.255.248` | `PC5`: `192.168.13.249 / 255.255.255.248` (Subnet: `192.168.13.248/29`)
 - **Packet Tracer Verification**: From `PC0` Command Prompt:
   ```cmd
-  ping 192.168.1.11
+  ping 192.168.1.4
   ```
 
 ### Exercise 2: Switch vs Hub Operations
 - **Topology**: 
-  - Switch Network: 3 PCs (`PC0`, `PC1`, `PC2`) connected to a 2960 Switch via Copper Straight-Through cables. Subnet: `192.168.1.0/24`.
-  - Hub Network: 3 PCs (`PC3`, `PC4`, `PC5`) connected to a Generic Hub via Copper Straight-Through cables. Subnet: `192.168.2.0/24`.
+  - Switch Network: 5 PCs (`S-PC1` through `S-PC5`) connected to a 2960 Switch via Copper Straight-Through cables. Subnet: `192.168.1.0/29` (given `S-PC5`: `192.168.1.5/29`).
+  - Hub Network: 5 PCs (`H-PC1` through `H-PC5`) connected to a Generic Hub via Copper Straight-Through cables. Subnet: `192.168.1.192/27` (given `H-PC1`: `192.168.1.193/27`).
 - **Packet Tracer Verification**:
   ```cmd
-  ping 192.168.1.12
-  ping 192.168.2.12
+  ping 192.168.1.4
+  ping 192.168.1.194
   ```
 
 ### Exercise 3: Core Network Services (DHCP, DNS, HTTPS, FTP)
-- **Topology**: Switch connected to 4 Servers and multiple PCs.
+- **Topology**: Cisco 2950-24 Switch connected to 4 Servers and 6 PCs (`PC0`–`PC5`).
 - **Server Configuration & Static IPs**:
-  1. **DHCP Server**: `192.168.1.2 /24`
-     - Pool Name: `serverPool`
-     - Default Gateway: `192.168.1.1`
-     - DNS Server: `192.168.1.4`
-     - Start IP: `192.168.1.100`, Netmask: `255.255.255.0`, Max users: `50`
-     - Disable HTTP, HTTPS, FTP, DNS on this server.
-  2. **HTTPS Server**: `192.168.1.99 /24`
+  1. **HTTPS Server**: `192.168.1.99 /24`
      - HTTP Service: **OFF**
      - HTTPS Service: **ON**
-     - `index.html` content: `<html><body>hello</body></html>`
+     - `index.html` content: hello message and login form
      - Disable DHCP, FTP, DNS on this server.
-  3. **FTP Server**: `192.168.1.3 /24`
+  2. **FTP Server**: `192.168.1.100 /24`
      - FTP Service: **ON**
      - User Credentials: `Username: deepinnet`, `Password: deepinnet`
      - Permissions: **RWDNL** (Read, Write, Delete, Name/Rename, List)
      - Disable HTTP, HTTPS, DHCP, DNS.
-  4. **DNS Server**: `192.168.1.4 /24`
+  3. **DNS Server**: `192.168.1.101 /24`
      - DNS Service: **ON**
      - Resource Records:
        - `deep-in-net.local` -> Type `A Record` -> `192.168.1.99`
        - `deep-in-net.com` -> Type `CNAME` -> `deep-in-net.local`
+  4. **DHCP Server**: `192.168.1.102 /24`
+     - Pool Name: `serverPool`
+     - Default Gateway: `0.0.0.0`
+     - DNS Server: `192.168.1.101`
+     - Start IP: `192.168.1.10`, Netmask: `255.255.255.0`, Max users: `50`
+     - Disable HTTP, HTTPS, FTP, DNS on this server.
 - **Verification Commands (PC Command Prompt)**:
   ```cmd
   ipconfig /renew
   nslookup deep-in-net.com
-  ftp 192.168.1.3
+  ftp 192.168.1.100
   ```
 
 ### Exercise 4: Single Router & Default Gateway
-- **Topology**: `PC0` (`192.168.1.10/24`, GW `192.168.1.1`) -> Router `Fa0/0` | Router `Fa0/1` -> `PC1` (`192.168.2.10/24`, GW `192.168.2.1`).
+- **Topology**: `PC0` (`192.168.1.2/30`, GW `192.168.1.1`) -> Router `Fa0/0` | Router `Fa0/1` -> `PC1` (`192.168.2.2/30`, GW `192.168.2.1`).
 - **Router CLI Configuration**:
   ```ios
   enable
   configure terminal
   interface FastEthernet0/0
-   ip address 192.168.1.1 255.255.255.0
+   ip address 192.168.1.1 255.255.255.252
    no shutdown
   exit
   interface FastEthernet0/1
-   ip address 192.168.2.1 255.255.255.0
+   ip address 192.168.2.1 255.255.255.252
    no shutdown
   exit
   end
@@ -125,23 +125,23 @@ which packettracer || echo "Cisco Packet Tracer executable not found in PATH. In
   ```
 
 ### Exercise 5: Inter-Subnet Communication with Switches and Router
-- **Topology**: Subnet 1 (`192.168.1.0/24`) connected to Switch 1 -> Router `Fa0/0` (`192.168.1.1`). Router `Fa0/1` (`192.168.2.1`) -> Switch 2 connected to Subnet 2 (`192.168.2.0/24`).
+- **Topology**: Switch 0 (`192.168.1.0/29`, 5 PCs) connected to Router 0 `Gig0/0` (`192.168.1.6/29`). Router 0 `Gig0/1` (`192.168.1.194/27`) connected to Switch 1 (`192.168.1.192/27`, 5 PCs).
 
 ### Exercise 6: Static Routing Between Routers
-- **Topology**: PC1 (`192.168.10.10/24`) -> Router 1 (`Fa0/0`: `192.168.10.1`, `Se0/0/0`: `10.0.0.1/30`) -> Router 2 (`Se0/0/0`: `10.0.0.2/30`, `Fa0/0`: `192.168.20.1`) -> PC2 (`192.168.20.10/24`).
+- **Topology**: PC1 (`192.168.1.2/24`) -> Router 1 (`Fa0/0`: `192.168.1.1`, `Se0/0/0`: `10.10.0.1/30`) -> Router 2 (`Se0/0/0`: `10.10.0.2/30`, `Fa0/0`: `192.168.2.1`) -> PC2 (`192.168.2.2/24`).
 - **Router 1 CLI Config**:
   ```ios
   enable
   configure terminal
   interface FastEthernet0/0
-   ip address 192.168.10.1 255.255.255.0
+   ip address 192.168.1.1 255.255.255.0
    no shutdown
   interface Serial0/0/0
-   ip address 10.0.0.1 255.255.255.252
+   ip address 10.10.0.1 255.255.255.252
    clock rate 64000
    no shutdown
   exit
-  ip route 192.168.20.0 255.255.255.0 10.0.0.2
+  ip route 192.168.2.0 255.255.255.0 10.10.0.2
   end
   ```
 - **Router 2 CLI Config**:
@@ -149,21 +149,21 @@ which packettracer || echo "Cisco Packet Tracer executable not found in PATH. In
   enable
   configure terminal
   interface FastEthernet0/0
-   ip address 192.168.20.1 255.255.255.0
+   ip address 192.168.2.1 255.255.255.0
    no shutdown
   interface Serial0/0/0
-   ip address 10.0.0.2 255.255.255.252
+   ip address 10.10.0.2 255.255.255.252
    no shutdown
   exit
-  ip route 192.168.10.0 255.255.255.0 10.0.0.1
+  ip route 192.168.1.0 255.255.255.0 10.10.0.1
   end
   ```
 
-### Exercise 7: Multi-Router Subnet Interconnection
-- **Topology**: 2 Routers, 2 Subnets (`172.16.1.0/24` and `172.16.2.0/24`), inter-router link `10.1.1.0/30`. Full bidirectional ping verification.
+### Exercise 7: Multi-Router Subnet Interconnection (Live Audit Task)
+- **Topology**: 2 Routers, 2 Switched Subnets (`192.168.1.0/24` and `192.168.2.0/24`), inter-router serial link `10.10.0.0/30`. Static routing for full bidirectional reachability.
 
-### Exercise 8: Complex 3-Subnet Mesh Network
-- **Topology**: 3 Routers (R1, R2, R3) and 3 Subnets (S1: `192.168.1.0/24`, S2: `192.168.2.0/24`, S3: `192.168.3.0/24`). Inter-router links: R1-R2 (`10.0.12.0/30`), R2-R3 (`10.0.23.0/30`), R1-R3 (`10.0.13.0/30`). Full static routing / OSPF mesh.
+### Exercise 8: 3-Subnet Chain Static Routing Network
+- **Topology**: 3 Routers in a chain: Router 1 (`192.168.1.192/26`, Serial `10.10.0.1/30`) <-> Router 2 (`Serial 10.10.0.2/30`, `192.168.2.0/24`, Serial `10.10.1.1/30`) <-> Router 3 (`Serial 10.10.1.2/30`, `192.168.3.160/28`). Full static routing reachability across all 3 LAN subnets.
 
 ---
 

@@ -51,14 +51,14 @@ deep-in-net/
 
 | Exercise | Topology Focus | Key Configuration Details |
 |---|---|---|
-| **Ex 01** | Direct PC Links | Copper Crossover Cable (T568A-T568B). `PC0` (`192.168.1.10`), `PC1` (`192.168.1.11`). |
-| **Ex 02** | Switch vs Hub | Switch (`192.168.1.0/24`) vs Hub (`192.168.2.0/24`). Straight-through cables. |
-| **Ex 03** | Core Services | DHCP (`192.168.1.2`), HTTPS (`192.168.1.99` display `"hello"`), FTP (`192.168.1.3`, user `deepinnet` with RWDNL), DNS (`192.168.1.4`, `deep-in-net.com` CNAME to `deep-in-net.local` -> `192.168.1.99`). |
-| **Ex 04** | Single Router | Subnet 1 (`192.168.1.0/24`), Subnet 2 (`192.168.2.0/24`). Gateway IPs on Router interfaces. |
-| **Ex 05** | Multi-Switch Router | Switch 1 + Switch 2 connected via Router interfaces. |
-| **Ex 06** | Static Routing | R1 <-> R2 over `10.0.0.0/30`. `ip route 192.168.20.0 255.255.255.0 10.0.0.2` on R1. |
-| **Ex 07** | Inter-Router Link | Live audit recreation task. R1 (`172.16.1.1`), R2 (`172.16.2.1`). |
-| **Ex 08** | 3-Subnet Mesh | R1, R2, R3 interconnected. Static routes for all remote subnets. |
+| **Ex 01** | Direct PC Links | Copper Crossover Cable (T568A-T568B). Pair 1 (`192.168.1.0/24`), Pair 2 (`192.168.13.80/29`), Pair 3 (`192.168.13.248/29`). |
+| **Ex 02** | Switch vs Hub | Switch Star (`192.168.1.0/29`, S-PC5 `192.168.1.5`) vs Hub Star (`192.168.1.192/27`, H-PC1 `192.168.1.193`). Straight-through cables. |
+| **Ex 03** | Core Services | HTTPS (`192.168.1.99` display `"hello"`), FTP (`192.168.1.100`, user `deepinnet` with RWDNL), DNS (`192.168.1.101`, `deep-in-net.com` CNAME to `deep-in-net.local` -> `192.168.1.99`), DHCP (`192.168.1.102` pool start `192.168.1.10`). |
+| **Ex 04** | Single Router | Subnet 1 (`192.168.1.0/30`), Subnet 2 (`192.168.2.0/30`). Gateway IPs on Router interfaces (`192.168.1.1`, `192.168.2.1`). |
+| **Ex 05** | Multi-Switch Router | Switch 0 (`192.168.1.0/29`, GW `192.168.1.6`) + Switch 1 (`192.168.1.192/27`, GW `192.168.1.194`) connected via 2911 Router. |
+| **Ex 06** | Static Routing | R1 <-> R2 over `10.10.0.0/30` serial link. Static routes: `192.168.2.0/24` via `10.10.0.2` and `192.168.1.0/24` via `10.10.0.1`. |
+| **Ex 07** | Inter-Router Link | Live audit recreation task. R0 (`192.168.1.1`), R1 (`192.168.2.1`), WAN serial `10.10.0.0/30`. |
+| **Ex 08** | 3-Subnet Chain | R1-R2-R3 chain. LAN 1 (`192.168.1.192/26`), WAN 1-2 (`10.10.0.0/30`), LAN 2 (`192.168.2.0/24`), WAN 2-3 (`10.10.1.0/30`), LAN 3 (`192.168.3.160/28`). |
 
 ---
 
@@ -71,7 +71,7 @@ Agents should execute the following terminal checks to validate workspace integr
 ./verify_topology.sh
 
 # 2. Check root files exist
-ls -1 ex01.pkt ex02.pkt ex03.pkt ex04.pkt ex05.pkt ex06.pkt ex07.pkt ex08.pkt bonus.pkt README.md audit.md verify_topology.sh AGENTS.md
+ls -1 ex01.pkt ex02.pkt ex03.pkt ex04.pkt ex05.pkt ex06.pkt ex07.pkt ex08.pkt README.md audit.md verify_topology.sh AGENTS.md
 
 # 3. Validate documentation file links and syntax
 test -f README.md && test -f AGENTS.md && test -f audit.md && test -f docs/requirements/readme.md && test -f docs/requirements/audit.md
